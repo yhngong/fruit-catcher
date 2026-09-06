@@ -1,9 +1,9 @@
-const CACHE_NAME = 'fruit-catcher-v13';
+const CACHE_NAME = 'fruit-catcher-v14';
 const ASSETS = [
   './',
   './index.html',
-  './style.css?v=13',
-  './app.js?v=13',
+  './style.css?v=14',
+  './app.js?v=14',
   './manifest.json',
   './icon.svg'
 ];

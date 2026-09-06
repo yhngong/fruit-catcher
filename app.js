@@ -228,6 +228,7 @@
   let floatingTexts = [];
   let screenShake = 0;
   let spawnCooldown = 0;
+  let itemsSinceLastBomb = 5;
   let lastTime = 0;
 
   // Control state
@@ -370,6 +371,7 @@
     magnetTimer = 0;
     slowTimer = 0;
     hasShield = false;
+    itemsSinceLastBomb = 5;
 
     fallingItems = [];
     particles = [];
@@ -515,9 +517,10 @@
       }
     }
 
-    // 3. Spawning Falling Items
+    // 3. Spawning Falling Items (Smooth, balanced pacing over 2m 30s)
     spawnCooldown -= dt;
-    const baseSpawnRate = feverActive ? 0.18 : Math.max(0.28, 0.72 - (score / 2500) * 0.4);
+    const timeElapsed = GAME_DURATION - timeLeft;
+    const baseSpawnRate = feverActive ? 0.20 : Math.max(0.42, 0.78 - (timeElapsed / GAME_DURATION) * 0.30);
     if (spawnCooldown <= 0) {
       spawnItem(width);
       spawnCooldown = baseSpawnRate * (slowTimer > 0 ? 1.5 : 1);
@@ -736,14 +739,18 @@
     if (feverActive) {
       // High chance of golden stars during fever
       type = roll < 0.65 ? 'golden' : (roll < 0.85 ? 'watermelon' : 'pineapple');
+      itemsSinceLastBomb++;
     } else {
-      // Reduced bomb frequency (50% less often: 19% base, scaling up to 25% as time winds down)
+      // Balanced gentle bomb scaling (starts at 8% base, gently scaling to max 13% over 2.5 minutes)
       const timeElapsed = GAME_DURATION - timeLeft;
-      const bombChance = Math.min(0.25, 0.19 + (timeElapsed / GAME_DURATION) * 0.06);
+      const bombChance = Math.min(0.13, 0.08 + (timeElapsed / GAME_DURATION) * 0.05);
 
-      if (roll < bombChance) {
+      // Require at least 2 non-bomb items between bombs to prevent unfair clusters
+      if (roll < bombChance && itemsSinceLastBomb >= 2) {
         type = 'bomb';
+        itemsSinceLastBomb = 0;
       } else {
+        itemsSinceLastBomb++;
         const subRoll = (roll - bombChance) / (1 - bombChance);
         if (subRoll < 0.04) type = 'power_magnet';
         else if (subRoll < 0.08) type = 'power_slow';
