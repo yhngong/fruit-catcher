@@ -144,12 +144,21 @@ body {
 }
 
 .fever-meter-wrapper.cooldown .fever-label {
-  color: #94a3b8;
-  letter-spacing: 0.03em;
+  color: #38bdf8;
+  letter-spacing: 0.04em;
+  font-size: 0.72rem;
+  animation: pulseCooldown 0.9s infinite alternate ease-in-out;
 }
 
 .fever-meter-wrapper.cooldown .fever-meter-track {
-  border-color: rgba(148, 163, 184, 0.4);
+  border-color: rgba(56, 189, 248, 0.5);
+  background: rgba(15, 23, 42, 0.95);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
+}
+
+@keyframes pulseCooldown {
+  0% { opacity: 0.7; transform: scale(0.97); }
+  100% { opacity: 1; transform: scale(1.03); }
 }
 
 /* Right HUD */

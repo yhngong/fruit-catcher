@@ -323,11 +323,12 @@
     feverMeter = 0;
     feverActive = false;
     feverTimer = 0;
-    feverCooldownTimer = 0;
+    // 5-second initial cooldown before fever bar can start accumulating points
+    feverCooldownTimer = 5;
     feverMeterFill.style.width = '0%';
-    feverLabel.textContent = 'FEVER';
-    feverMeterFill.style.background = 'linear-gradient(90deg, #f59e0b, #ef4444)';
-    if (feverMeterWrapper) feverMeterWrapper.classList.remove('cooldown');
+    feverLabel.textContent = 'COOLDOWN 5s';
+    feverMeterFill.style.background = 'linear-gradient(90deg, #94a3b8, #64748b)';
+    if (feverMeterWrapper) feverMeterWrapper.classList.add('cooldown');
     magnetTimer = 0;
     slowTimer = 0;
     hasShield = false;
@@ -458,6 +459,7 @@
         feverMeter = 0;
         feverMeterFill.style.width = '0%';
         feverLabel.textContent = 'COOLDOWN 5s';
+        feverMeterFill.style.background = 'linear-gradient(90deg, #94a3b8, #64748b)';
         if (feverMeterWrapper) feverMeterWrapper.classList.add('cooldown');
         addFloatingText(basket.x, basket.y - 40, 'Fever Ended • 5s Cooldown', '#94a3b8', 1.2);
       }
@@ -477,7 +479,7 @@
 
     // 3. Spawning Falling Items
     spawnCooldown -= dt;
-    const baseSpawnRate = feverActive ? 0.18 : Math.max(0.28, 0.75 - (score / 2500) * 0.45);
+    const baseSpawnRate = feverActive ? 0.18 : Math.max(0.24, 0.65 - (score / 2500) * 0.4);
     if (spawnCooldown <= 0) {
       spawnItem(width);
       spawnCooldown = baseSpawnRate * (slowTimer > 0 ? 1.5 : 1);
@@ -656,6 +658,8 @@
       if (feverMeter >= 100) {
         triggerFeverMode();
       }
+    } else if (feverCooldownTimer > 0 && item.type !== 'bomb') {
+      addFloatingText(item.x, item.y - 25, '⏳ Cooldown', '#38bdf8', 0.95);
     }
 
     // Audio & Visual feedback
@@ -696,23 +700,23 @@
       // High chance of golden stars during fever
       type = roll < 0.65 ? 'golden' : (roll < 0.85 ? 'watermelon' : 'pineapple');
     } else {
-      // Significantly increased bomb frequency (~25% base, scaling up to 33% as time winds down)
+      // High bomb frequency (38% base, scaling up to 50% as time winds down)
       const timeElapsed = GAME_DURATION - timeLeft;
-      const bombChance = Math.min(0.33, 0.25 + (timeElapsed / GAME_DURATION) * 0.08);
+      const bombChance = Math.min(0.50, 0.38 + (timeElapsed / GAME_DURATION) * 0.12);
 
       if (roll < bombChance) {
         type = 'bomb';
       } else {
         const subRoll = (roll - bombChance) / (1 - bombChance);
         if (subRoll < 0.04) type = 'power_magnet';
-        else if (subRoll < 0.09) type = 'power_slow';
-        else if (subRoll < 0.13) type = 'power_shield';
-        else if (subRoll < 0.20) type = 'golden';
-        else if (subRoll < 0.38) type = 'apple';
-        else if (subRoll < 0.54) type = 'orange';
-        else if (subRoll < 0.70) type = 'banana';
-        else if (subRoll < 0.84) type = 'strawberry';
-        else if (subRoll < 0.93) type = 'watermelon';
+        else if (subRoll < 0.08) type = 'power_slow';
+        else if (subRoll < 0.12) type = 'power_shield';
+        else if (subRoll < 0.18) type = 'golden';
+        else if (subRoll < 0.36) type = 'apple';
+        else if (subRoll < 0.52) type = 'orange';
+        else if (subRoll < 0.68) type = 'banana';
+        else if (subRoll < 0.82) type = 'strawberry';
+        else if (subRoll < 0.92) type = 'watermelon';
         else type = 'pineapple';
       }
     }
@@ -1132,7 +1136,9 @@
   function registerServiceWorker() {
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js').catch(() => {});
+        navigator.serviceWorker.register('sw.js').then((reg) => {
+          reg.update();
+        }).catch(() => {});
       });
     }
   }
