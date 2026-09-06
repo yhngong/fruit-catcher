@@ -487,7 +487,7 @@
 
     // 3. Spawning Falling Items
     spawnCooldown -= dt;
-    const baseSpawnRate = feverActive ? 0.18 : Math.max(0.24, 0.65 - (score / 2500) * 0.4);
+    const baseSpawnRate = feverActive ? 0.18 : Math.max(0.28, 0.72 - (score / 2500) * 0.4);
     if (spawnCooldown <= 0) {
       spawnItem(width);
       spawnCooldown = baseSpawnRate * (slowTimer > 0 ? 1.5 : 1);
@@ -708,9 +708,9 @@
       // High chance of golden stars during fever
       type = roll < 0.65 ? 'golden' : (roll < 0.85 ? 'watermelon' : 'pineapple');
     } else {
-      // High bomb frequency (38% base, scaling up to 50% as time winds down)
+      // Reduced bomb frequency (50% less often: 19% base, scaling up to 25% as time winds down)
       const timeElapsed = GAME_DURATION - timeLeft;
-      const bombChance = Math.min(0.50, 0.38 + (timeElapsed / GAME_DURATION) * 0.12);
+      const bombChance = Math.min(0.25, 0.19 + (timeElapsed / GAME_DURATION) * 0.06);
 
       if (roll < bombChance) {
         type = 'bomb';
