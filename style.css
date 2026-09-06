@@ -143,6 +143,15 @@ body {
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
 }
 
+.fever-meter-wrapper.cooldown .fever-label {
+  color: #94a3b8;
+  letter-spacing: 0.03em;
+}
+
+.fever-meter-wrapper.cooldown .fever-meter-track {
+  border-color: rgba(148, 163, 184, 0.4);
+}
+
 /* Right HUD */
 .hud-right {
   display: flex;

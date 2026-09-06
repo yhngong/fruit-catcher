@@ -165,6 +165,7 @@
   let feverMeter = 0;
   let feverActive = false;
   let feverTimer = 0;
+  let feverCooldownTimer = 0;
 
   // Power-up Timers
   let magnetTimer = 0;
@@ -203,6 +204,7 @@
   const scoreVal = document.getElementById('scoreVal');
   const highScoreVal = document.getElementById('highScoreVal');
   const coinsVal = document.getElementById('coinsVal');
+  const feverMeterWrapper = document.getElementById('feverMeterWrapper');
   const feverMeterFill = document.getElementById('feverMeterFill');
   const feverLabel = document.getElementById('feverLabel');
   const timerPill = document.getElementById('timerPill');
@@ -321,6 +323,11 @@
     feverMeter = 0;
     feverActive = false;
     feverTimer = 0;
+    feverCooldownTimer = 0;
+    feverMeterFill.style.width = '0%';
+    feverLabel.textContent = 'FEVER';
+    feverMeterFill.style.background = 'linear-gradient(90deg, #f59e0b, #ef4444)';
+    if (feverMeterWrapper) feverMeterWrapper.classList.remove('cooldown');
     magnetTimer = 0;
     slowTimer = 0;
     hasShield = false;
@@ -447,8 +454,24 @@
       feverMeterFill.style.width = `${feverMeter}%`;
       if (feverTimer <= 0) {
         feverActive = false;
+        feverCooldownTimer = 5; // 5-second cooldown before points can be added
+        feverMeter = 0;
+        feverMeterFill.style.width = '0%';
+        feverLabel.textContent = 'COOLDOWN 5s';
+        if (feverMeterWrapper) feverMeterWrapper.classList.add('cooldown');
+        addFloatingText(basket.x, basket.y - 40, 'Fever Ended • 5s Cooldown', '#94a3b8', 1.2);
+      }
+    } else if (feverCooldownTimer > 0) {
+      feverCooldownTimer -= dt;
+      if (feverCooldownTimer <= 0) {
+        feverCooldownTimer = 0;
         feverLabel.textContent = 'FEVER';
         feverMeterFill.style.background = 'linear-gradient(90deg, #f59e0b, #ef4444)';
+        if (feverMeterWrapper) feverMeterWrapper.classList.remove('cooldown');
+        addFloatingText(basket.x, basket.y - 35, '⚡ FEVER READY! ⚡', '#fde047', 1.3);
+        playSound('powerup');
+      } else {
+        feverLabel.textContent = `COOLDOWN ${Math.ceil(feverCooldownTimer)}s`;
       }
     }
 
@@ -624,8 +647,8 @@
       playSound('golden');
     }
 
-    // Fill fever meter
-    if (!feverActive) {
+    // Fill fever meter (only when not active and 5s cooldown is complete)
+    if (!feverActive && feverCooldownTimer <= 0) {
       const feverGain = item.type === 'golden' ? 25 : 6;
       feverMeter = Math.min(100, feverMeter + feverGain);
       feverMeterFill.style.width = `${feverMeter}%`;
@@ -657,6 +680,8 @@
   function triggerFeverMode() {
     feverActive = true;
     feverTimer = 8;
+    feverCooldownTimer = 0;
+    if (feverMeterWrapper) feverMeterWrapper.classList.remove('cooldown');
     feverLabel.textContent = '🌟 FEVER TIME 🌟';
     feverMeterFill.style.background = 'linear-gradient(90deg, #facc15, #ec4899)';
     playSound('fever');
