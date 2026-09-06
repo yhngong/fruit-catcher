@@ -182,6 +182,7 @@
     { id: 'dragon', name: 'Dragon Hoard', icon: '🐉', price: 1500, desc: 'Crimson beast with golden horns' },
     { id: 'diamond', name: 'Diamond Throne', icon: '👑', price: 1800, desc: 'Apex royal platinum & sapphire throne' },
     { id: 'blackhole', name: 'Black Hole', icon: '🕳️', price: 2000, desc: 'Singularity with glowing accretion disk' },
+    { id: 'phoenix', name: 'Phoenix Flame', icon: '🔥', price: 2500, desc: 'Immortal firebird blazing with radiant embers' },
     { id: 'green', name: 'Green', icon: '🟢', price: 10000, desc: 'The legendary apex final skin radiant in emerald' }
   ];
 
@@ -2574,6 +2575,88 @@
       ctx.stroke();
       ctx.shadowBlur = 0;
 
+    } else if (skin === 'phoenix') {
+      // Phoenix Flame (Mythical Immortal Firebird)
+      ctx.shadowColor = '#f97316';
+      ctx.shadowBlur = 18;
+
+      // Blazing Molten Hull
+      const fireGrad = ctx.createLinearGradient(0, -h / 2, 0, h / 2);
+      fireGrad.addColorStop(0, '#fef08a');   // Blazing yellow core
+      fireGrad.addColorStop(0.3, '#f97316'); // Radiant orange
+      fireGrad.addColorStop(0.7, '#dc2626'); // Crimson fire
+      fireGrad.addColorStop(1, '#7f1d1d');   // Deep volcanic ember
+      ctx.fillStyle = fireGrad;
+      ctx.beginPath();
+      ctx.roundRect(-w / 2, -h / 2, w, h, [6, 6, 18, 18]);
+      ctx.fill();
+
+      // Golden Flame Outer Trim
+      ctx.strokeStyle = '#facc15';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Sweeping Phoenix Wings (Flames spreading from edges)
+      [-1, 1].forEach((dir) => {
+        // Outer feather wing
+        ctx.fillStyle = '#f97316';
+        ctx.beginPath();
+        ctx.moveTo(dir * (w / 2), -h / 4);
+        ctx.quadraticCurveTo(dir * (w / 2 + 16), -h / 2 - 6, dir * (w / 2 + 8), h / 3);
+        ctx.lineTo(dir * (w / 2), h / 3);
+        ctx.closePath();
+        ctx.fill();
+
+        // Inner golden feather tier
+        ctx.fillStyle = '#fde047';
+        ctx.beginPath();
+        ctx.moveTo(dir * (w / 2), -h / 8);
+        ctx.quadraticCurveTo(dir * (w / 2 + 10), -h / 2, dir * (w / 2 + 5), h / 4);
+        ctx.lineTo(dir * (w / 2), h / 4);
+        ctx.closePath();
+        ctx.fill();
+      });
+
+      // Central Golden Solar Crest (Sun / Head)
+      ctx.shadowColor = '#fde047';
+      ctx.shadowBlur = 12;
+      ctx.fillStyle = '#fef08a';
+      ctx.beginPath();
+      ctx.moveTo(0, -h / 2 - 4);
+      ctx.lineTo(7, -1);
+      ctx.lineTo(0, 7);
+      ctx.lineTo(-7, -1);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = '#ea580c';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Ruby Phoenix Eyes
+      [-w * 0.16, w * 0.16].forEach((lx) => {
+        ctx.fillStyle = '#facc15';
+        ctx.beginPath();
+        ctx.arc(lx, -2, 3.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#7f1d1d';
+        ctx.beginPath();
+        ctx.arc(lx, -2, 2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#fff';
+        ctx.beginPath();
+        ctx.arc(lx - 0.7, -2.7, 1, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      // Floating Flame Embers along top
+      [-w * 0.32, 0, w * 0.32].forEach((ex, idx) => {
+        ctx.fillStyle = idx === 1 ? '#fff' : '#fde047';
+        ctx.beginPath();
+        ctx.arc(ex, -h * 0.38, 2, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      ctx.shadowBlur = 0;
+
     } else if (skin === 'green') {
       // Green (The Legendary 10,000 Points Apex Skin)
       ctx.shadowColor = '#22c55e';
@@ -2709,9 +2792,11 @@
       const isActive = basket.skin === skin.id;
 
       const card = document.createElement('div');
-      card.className = `skin-card ${isActive ? 'active' : ''} ${skin.id === 'green' ? 'skin-green' : ''}`;
+      card.className = `skin-card ${isActive ? 'active' : ''} ${skin.id === 'green' ? 'skin-green' : ''} ${skin.id === 'phoenix' ? 'skin-phoenix' : ''}`;
 
-      const buyBtnClass = skin.id === 'green' ? 'skin-buy-btn skin-buy-green' : 'skin-buy-btn';
+      let buyBtnClass = 'skin-buy-btn';
+      if (skin.id === 'green') buyBtnClass = 'skin-buy-btn skin-buy-green';
+      else if (skin.id === 'phoenix') buyBtnClass = 'skin-buy-btn skin-buy-phoenix';
       const buyBtnHtml = `<button class="${buyBtnClass}" data-id="${skin.id}">🪙 ${skin.price.toLocaleString()}</button>`;
 
       card.innerHTML = `
