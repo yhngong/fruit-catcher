@@ -3,8 +3,8 @@
  * Pure HTML5 Canvas, Web Audio API procedural sound, and zero dependencies.
  *
  * Credits & Audio Attribution:
- * - Game Design & Development: Yolet Gong
- * - Dynamic Procedural Chiptune Music & Sound Engine: Antigravity (Google DeepMind) & Yolet Gong
+ * - Game Design & Development: Yohan Gong & Antigravity
+ * - Dynamic Procedural Chiptune Music & Sound Engine: Yohan Gong & Antigravity
  *   Synthesized in real time using native Web Audio API oscillators, biquad filters, and step sequencers.
  *   Zero external audio files, samples, or third-party libraries used.
  */
@@ -134,7 +134,7 @@
   }
 
   // --- Background Music Synthesizer Engine ---
-  // Music & Sound Design: Procedurally composed and synthesized by Antigravity & Yolet Gong.
+  // Music & Sound Design: Procedurally composed and synthesized by Yohan Gong & Antigravity.
   // 100% native Web Audio API (zero audio files downloaded).
   let bgmGainNode = null;
   let bgmFilterNode = null;

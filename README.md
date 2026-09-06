@@ -88,9 +88,9 @@ Open `http://localhost:8000` in your browser.
 
 ## 🎼 Credits & Audio Attribution
 
-- **Game Design & Code**: [Yolet Gong](https://github.com/yhngong)
+- **Game Design & Code**: [Yohan Gong](https://github.com/yhngong) & **Antigravity**
 - **Background Music & Sound Engine**:
-  - Original procedural chiptune soundtrack and audio synthesizer engine created by **Antigravity** (Google DeepMind) & **Yolet Gong**.
+  - Original procedural chiptune soundtrack and audio synthesizer engine created by **Yohan Gong** & **Antigravity** (Google DeepMind).
   - 100% synthesized in real time via the browser's native **Web Audio API** (custom waveform oscillators, noise generators, and step sequencers).
   - Zero external MP3/WAV/OGG audio files downloaded — fully self-contained, offline-compatible, and royalty-free.
 
