@@ -715,6 +715,22 @@ body {
   cursor: pointer;
 }
 
+.skin-card.skin-green {
+  border: 1.5px solid rgba(34, 197, 94, 0.5);
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.2);
+}
+
+.skin-card.skin-green:hover {
+  border-color: #22c55e;
+  box-shadow: 0 0 16px rgba(34, 197, 94, 0.4);
+}
+
+.skin-buy-btn.skin-buy-green {
+  background: linear-gradient(135deg, #16a34a, #22c55e);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.4);
+}
+
 /* How to Play */
 .how-to-play-content {
   display: flex;

@@ -28,6 +28,7 @@ A juicy, fast-paced arcade fruit-catching game built with pure HTML5 Canvas, mod
     - 🤖 **Cyber Mecha Hopper**
     - 🍉 **Melon Bowl**
     - 🐼 **Panda Pouch**
+    - 🟢 **Green (The Legendary 10,000 Pts Apex Skin)**
 - 🔊 **Procedural Web Audio Engine**:
   - Pitch-shifting catch pops, golden twinkling arpeggios, bomb explosions, and victory fanfares synthesized dynamically in-browser via the Web Audio API (zero audio files downloaded).
 - 📱 **Mobile Touch Controls**:

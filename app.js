@@ -181,7 +181,8 @@
     { id: 'lava', name: 'Magma Cauldron', icon: '🌋', price: 1200, desc: 'Cracked basalt with bubbling lava' },
     { id: 'dragon', name: 'Dragon Hoard', icon: '🐉', price: 1500, desc: 'Crimson beast with golden horns' },
     { id: 'diamond', name: 'Diamond Throne', icon: '👑', price: 1800, desc: 'Apex royal platinum & sapphire throne' },
-    { id: 'blackhole', name: 'Black Hole', icon: '🕳️', price: 2000, desc: 'Singularity with glowing accretion disk' }
+    { id: 'blackhole', name: 'Black Hole', icon: '🕳️', price: 2000, desc: 'Singularity with glowing accretion disk' },
+    { id: 'green', name: 'Green', icon: '🟢', price: 10000, desc: 'The legendary apex final skin radiant in emerald' }
   ];
 
   // --- State Variables ---
@@ -304,6 +305,10 @@
       if (activeSkin && unlockedSkins.includes(activeSkin)) {
         basket.skin = activeSkin;
       }
+
+      if (highScore >= 10000 && !unlockedSkins.includes('green')) {
+        unlockedSkins.push('green');
+      }
     } catch (e) {}
 
     highScoreVal.textContent = highScore;
@@ -407,6 +412,10 @@
       newHighBanner.classList.remove('hidden');
     } else {
       newHighBanner.classList.add('hidden');
+    }
+
+    if (highScore >= 10000 && !unlockedSkins.includes('green')) {
+      unlockedSkins.push('green');
     }
 
     coins += totalCoinsEarned;
@@ -2573,6 +2582,77 @@
       ctx.stroke();
       ctx.shadowBlur = 0;
 
+    } else if (skin === 'green') {
+      // Green (The Legendary 10,000 Points Apex Skin)
+      ctx.shadowColor = '#22c55e';
+      ctx.shadowBlur = 18;
+
+      // Radiant Emerald Hull
+      const greenGrad = ctx.createLinearGradient(0, -h / 2, 0, h / 2);
+      greenGrad.addColorStop(0, '#86efac');   // Radiant mint
+      greenGrad.addColorStop(0.25, '#22c55e'); // Electric lime green
+      greenGrad.addColorStop(0.7, '#15803d');  // Imperial jade
+      greenGrad.addColorStop(1, '#052e16');    // Deep emerald shadow
+      ctx.fillStyle = greenGrad;
+      ctx.beginPath();
+      ctx.roundRect(-w / 2, -h / 2, w, h, [8, 8, 20, 20]);
+      ctx.fill();
+
+      // Glowing Neon Green Outer Rim
+      ctx.strokeStyle = '#4ade80';
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+
+      // Emerald Cyber Wing Accents
+      ctx.strokeStyle = 'rgba(187, 247, 208, 0.85)';
+      ctx.lineWidth = 1.5;
+      [-1, 1].forEach((dir) => {
+        ctx.beginPath();
+        ctx.moveTo(dir * (w * 0.42), -h * 0.25);
+        ctx.lineTo(dir * (w * 0.28), h * 0.15);
+        ctx.lineTo(dir * (w * 0.18), h * 0.15);
+        ctx.stroke();
+      });
+
+      // Center Grand Emerald Power Core
+      ctx.shadowColor = '#86efac';
+      ctx.shadowBlur = 14;
+      const gemGrad = ctx.createRadialGradient(0, 0, 1, 0, 0, 11);
+      gemGrad.addColorStop(0, '#f0fdf4');
+      gemGrad.addColorStop(0.35, '#4ade80');
+      gemGrad.addColorStop(0.75, '#16a34a');
+      gemGrad.addColorStop(1, '#052e16');
+      ctx.fillStyle = gemGrad;
+      ctx.beginPath();
+      ctx.moveTo(0, -9);
+      ctx.lineTo(11, 0);
+      ctx.lineTo(0, 9);
+      ctx.lineTo(-11, 0);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = '#dcfce7';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Top Glass Sheen Reflection
+      ctx.shadowBlur = 0;
+      const sheen = ctx.createLinearGradient(0, -h / 2 + 2, 0, -h * 0.1);
+      sheen.addColorStop(0, 'rgba(255, 255, 255, 0.5)');
+      sheen.addColorStop(1, 'rgba(255, 255, 255, 0.05)');
+      ctx.fillStyle = sheen;
+      ctx.beginPath();
+      ctx.roundRect(-w * 0.42, -h * 0.42, w * 0.84, h * 0.26, 4);
+      ctx.fill();
+
+      // Floating Neon Corner Sparkles
+      [-w * 0.44, w * 0.44].forEach((lx) => {
+        ctx.fillStyle = '#86efac';
+        ctx.beginPath();
+        ctx.arc(lx, -h * 0.35, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      ctx.shadowBlur = 0;
+
     } else {
       // Classic Woven Wicker Basket
       const grad = ctx.createLinearGradient(0, -h / 2, 0, h / 2);
@@ -2637,7 +2717,14 @@
       const isActive = basket.skin === skin.id;
 
       const card = document.createElement('div');
-      card.className = `skin-card ${isActive ? 'active' : ''}`;
+      card.className = `skin-card ${isActive ? 'active' : ''} ${skin.id === 'green' ? 'skin-green' : ''}`;
+
+      let buyBtnHtml = `<button class="skin-buy-btn" data-id="${skin.id}">🪙 ${skin.price}</button>`;
+      if (skin.id === 'green') {
+        const canUnlock = (highScore >= 10000) || (score >= 10000) || ((coins + totalCoinsEarned) >= 10000);
+        buyBtnHtml = `<button class="skin-buy-btn skin-buy-green" data-id="${skin.id}">${canUnlock ? '🔓 Unlock (10k Pts)' : '10,000 Pts / 🪙'}</button>`;
+      }
+
       card.innerHTML = `
         <span class="skin-preview-icon">${skin.icon}</span>
         <span class="skin-name">${skin.name}</span>
@@ -2645,7 +2732,7 @@
         ${
           isOwned
             ? `<span class="skin-status-badge">${isActive ? 'Equipped' : 'Select'}</span>`
-            : `<button class="skin-buy-btn" data-id="${skin.id}">🪙 ${skin.price}</button>`
+            : buyBtnHtml
         }
       `;
 
@@ -2666,6 +2753,34 @@
 
   function buySkin(skin) {
     const currentTotalCoins = coins + totalCoinsEarned;
+    if (skin.id === 'green') {
+      const hasPoints = (highScore >= 10000) || (score >= 10000);
+      const hasCoins = currentTotalCoins >= 10000;
+      if (hasPoints) {
+        if (!unlockedSkins.includes('green')) unlockedSkins.push('green');
+        basket.skin = 'green';
+        savePersistedData();
+        renderShop();
+        updateHUD();
+        playSound('fever');
+        alert('🎉 Congratulations! You unlocked the final Green skin with 10,000 points!');
+        return;
+      } else if (hasCoins) {
+        coins = currentTotalCoins - 10000;
+        totalCoinsEarned = 0;
+        if (!unlockedSkins.includes('green')) unlockedSkins.push('green');
+        basket.skin = 'green';
+        savePersistedData();
+        renderShop();
+        updateHUD();
+        playSound('fever');
+        return;
+      } else {
+        alert(`The Green skin requires 10,000 points or coins!\n\nYour Best Score: ${highScore} pts\nYour Coins: 🪙 ${currentTotalCoins}`);
+        return;
+      }
+    }
+
     if (currentTotalCoins >= skin.price) {
       coins = currentTotalCoins - skin.price;
       totalCoinsEarned = 0;
