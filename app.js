@@ -144,29 +144,44 @@
   const BASKET_SKINS = [
     { id: 'classic', name: 'Wicker Basket', icon: '🧺', price: 0, desc: 'Classic handwoven picnic basket' },
     { id: 'frog', name: 'Lil Froggy', icon: '🐸', price: 60, desc: 'Hoppy & happy pond pal' },
+    { id: 'beach', name: 'Beach Bucket', icon: '🏖️', price: 90, desc: 'Sunny sandcastle pail with shovel' },
     { id: 'cat', name: 'Neko Catcher', icon: '🐱', price: 100, desc: 'Lucky calico kitty bowl with ears' },
+    { id: 'coffee', name: 'Coffee Mug', icon: '☕', price: 110, desc: 'Warm turquoise mug with heart latte art' },
     { id: 'ghost', name: 'Lil Ghosty', icon: '👻', price: 120, desc: 'Friendly floating spectral sheet' },
+    { id: 'cactus', name: 'Cactus Pot', icon: '🌵', price: 130, desc: 'Terracotta pot with blooming flower' },
     { id: 'mushroom', name: 'Mushroom Cap', icon: '🍄', price: 140, desc: 'Cute polka-dot red woodland toadstool' },
     { id: 'golden', name: 'Royal Gold Urn', icon: '🪙', price: 150, desc: 'Forged in solid 24k gold with ruby' },
+    { id: 'penguin', name: 'Penguin Waddle', icon: '🐧', price: 160, desc: 'Tuxedo penguin with orange beak' },
     { id: 'fox', name: 'Fox Shrine', icon: '🦊', price: 180, desc: 'Kitsune fox bowl with Shinto bell' },
+    { id: 'bear', name: 'Teddy Bear', icon: '🐻', price: 190, desc: 'Fuzzy chocolate bear with button eyes' },
     { id: 'pumpkin', name: 'Spooky Jack', icon: '🎃', price: 220, desc: 'Carved Halloween pumpkin with glow' },
+    { id: 'avocado', name: 'Holy Guac', icon: '🥑', price: 240, desc: 'Ripe creamy avocado with glossy pit' },
     { id: 'pirate', name: 'Treasure Chest', icon: '🏴‍☠️', price: 250, desc: 'Heavy oak chest with brass fittings' },
+    { id: 'donut', name: 'Donut Glaze', icon: '🍩', price: 260, desc: 'Golden dough with strawberry glaze' },
+    { id: 'shark', name: 'Chompy Shark', icon: '🦈', price: 280, desc: 'Fierce cute blue shark with sharp teeth' },
     { id: 'sundae', name: 'Sundae Bowl', icon: '🍦', price: 300, desc: 'Waffle cone with strawberry & cherry' },
     { id: 'cyber', name: 'Cyber Hopper', icon: '🤖', price: 320, desc: 'Neon-infused mecha collector' },
+    { id: 'burger', name: 'Burger Basket', icon: '🍔', price: 340, desc: 'Toasted brioche bun with cheese & patty' },
     { id: 'pizza', name: 'Pizza Slice', icon: '🍕', price: 360, desc: 'Cheesy pizza crust with pepperoni' },
+    { id: 'bat', name: 'Night Bat', icon: '🦇', price: 380, desc: 'Gothic velvet bat with scalloped wings' },
     { id: 'rainbow', name: 'Rainbow Cloud', icon: '🌈', price: 400, desc: 'Fluffy cloud with rainbow stripes' },
+    { id: 'taco', name: 'Crispy Taco', icon: '🌮', price: 420, desc: 'Crunchy corn shell with meat & salsa' },
     { id: 'arcade', name: 'Retro Arcade', icon: '👾', price: 450, desc: '8-bit CRT cabinet with joystick' },
+    { id: 'lion', name: 'Lion Roar', icon: '🦁', price: 480, desc: 'Majestic golden lion with fluffy mane' },
     { id: 'sushi', name: 'Sushi Boat', icon: '🍣', price: 500, desc: 'Japanese wooden lacquer boat with nori' },
     { id: 'watermelon', name: 'Melon Bowl', icon: '🍉', price: 550, desc: 'Crisp, sweet giant watermelon' },
     { id: 'crystal', name: 'Crystal Prism', icon: '💎', price: 600, desc: 'Radiant sparkling diamond crystal' },
+    { id: 'rocket', name: 'Rocket Booster', icon: '🚀', price: 650, desc: 'Retro space rocket with flame exhaust' },
     { id: 'ufo', name: 'Alien Saucer', icon: '🛸', price: 700, desc: 'Saucer with tractor beam & alien' },
+    { id: 'viking', name: 'Viking Longboat', icon: '⚔️', price: 750, desc: 'Nordic warship with shields & dragon prow' },
     { id: 'thunder', name: 'Thunder Bolt', icon: '⚡', price: 800, desc: 'Electrified high-voltage battery' },
     { id: 'galaxy', name: 'Cosmic Nebula', icon: '🌌', price: 850, desc: 'Midnight nebula with stardust & ring' },
     { id: 'unicorn', name: 'Unicorn Dream', icon: '🦄', price: 950, desc: 'Pastel mane with golden spiral horn' },
     { id: 'panda', name: 'Panda Pouch', icon: '🐼', price: 1000, desc: 'Adorable panda face with ears' },
     { id: 'lava', name: 'Magma Cauldron', icon: '🌋', price: 1200, desc: 'Cracked basalt with bubbling lava' },
     { id: 'dragon', name: 'Dragon Hoard', icon: '🐉', price: 1500, desc: 'Crimson beast with golden horns' },
-    { id: 'diamond', name: 'Diamond Throne', icon: '👑', price: 1800, desc: 'Apex royal platinum & sapphire throne' }
+    { id: 'diamond', name: 'Diamond Throne', icon: '👑', price: 1800, desc: 'Apex royal platinum & sapphire throne' },
+    { id: 'blackhole', name: 'Black Hole', icon: '🕳️', price: 2000, desc: 'Singularity with glowing accretion disk' }
   ];
 
   // --- State Variables ---
@@ -1968,6 +1983,595 @@
       ctx.beginPath();
       ctx.arc(0, -7, 1.8, 0, Math.PI * 2);
       ctx.fill();
+
+    } else if (skin === 'beach') {
+      // Beach Bucket
+      const pailGrad = ctx.createLinearGradient(-w / 2, 0, w / 2, 0);
+      pailGrad.addColorStop(0, '#facc15');
+      pailGrad.addColorStop(1, '#eab308');
+      ctx.fillStyle = pailGrad;
+      ctx.beginPath();
+      ctx.moveTo(-w / 2, -h / 2);
+      ctx.lineTo(w / 2, -h / 2);
+      ctx.lineTo(w * 0.38, h / 2);
+      ctx.lineTo(-w * 0.38, h / 2);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = '#ca8a04';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Arched blue handle
+      ctx.strokeStyle = '#0284c7';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.arc(0, -h / 2, w * 0.44, Math.PI, 0);
+      ctx.stroke();
+
+      // Blue toy spade shovel
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillRect(w * 0.22, -h / 2 - 14, 4, 18);
+      ctx.beginPath();
+      ctx.arc(w * 0.22 + 2, -h / 2 - 14, 4, 0, Math.PI * 2);
+      ctx.fill();
+
+      // White seashell
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(0, 2, 5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#ca8a04';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+    } else if (skin === 'coffee') {
+      // Coffee Mug
+      ctx.fillStyle = '#0891b2';
+      ctx.beginPath();
+      ctx.roundRect(-w / 2, -h / 2, w * 0.82, h, [6, 6, 12, 12]);
+      ctx.fill();
+      ctx.strokeStyle = '#164e63';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Mug Handle
+      ctx.strokeStyle = '#0891b2';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.arc(w * 0.38, 0, 8, -Math.PI * 0.5, Math.PI * 0.5);
+      ctx.stroke();
+
+      // Coffee surface
+      ctx.fillStyle = '#451a03';
+      ctx.beginPath();
+      ctx.ellipse(-w * 0.08, -h / 2 + 5, w * 0.35, 4, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Cream latte heart
+      ctx.fillStyle = '#fef3c7';
+      ctx.beginPath();
+      ctx.arc(-w * 0.12, -h / 2 + 5, 2.5, 0, Math.PI * 2);
+      ctx.arc(-w * 0.04, -h / 2 + 5, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Steam wisps
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+      ctx.lineWidth = 1.5;
+      [-w * 0.15, 0].forEach((sx) => {
+        ctx.beginPath();
+        ctx.moveTo(sx, -h / 2);
+        ctx.quadraticCurveTo(sx + 4, -h / 2 - 6, sx, -h / 2 - 12);
+        ctx.stroke();
+      });
+
+    } else if (skin === 'cactus') {
+      // Cactus Pot
+      const potGrad = ctx.createLinearGradient(0, 0, 0, h / 2);
+      potGrad.addColorStop(0, '#ea580c');
+      potGrad.addColorStop(1, '#9a3412');
+      ctx.fillStyle = potGrad;
+      ctx.beginPath();
+      ctx.roundRect(-w * 0.42, 0, w * 0.84, h / 2, [0, 0, 8, 8]);
+      ctx.fill();
+      ctx.fillRect(-w * 0.46, -2, w * 0.92, 5);
+
+      // Green Saguaro Cactus Body
+      ctx.fillStyle = '#16a34a';
+      ctx.beginPath();
+      ctx.roundRect(-w * 0.22, -h / 2, w * 0.44, h * 0.65, 8);
+      ctx.fill();
+
+      // Cactus arms
+      [-1, 1].forEach((dir) => {
+        ctx.beginPath();
+        ctx.roundRect(dir * w * 0.32, -h * 0.35, 8, 12, 3);
+        ctx.fillRect(dir * w * 0.20, -h * 0.15, dir * 14, 5);
+        ctx.fill();
+      });
+
+      // Needle thorns
+      ctx.fillStyle = '#fef08a';
+      [-w * 0.1, 0, w * 0.1].forEach((nx) => {
+        [-h * 0.3, -h * 0.1].forEach((ny) => {
+          ctx.fillRect(nx, ny, 1.5, 1.5);
+        });
+      });
+
+      // Hot pink blooming desert flower
+      ctx.fillStyle = '#f43f5e';
+      ctx.beginPath();
+      ctx.arc(0, -h / 2 - 2, 5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#fef08a';
+      ctx.beginPath();
+      ctx.arc(0, -h / 2 - 2, 2, 0, Math.PI * 2);
+      ctx.fill();
+
+    } else if (skin === 'penguin') {
+      // Penguin Waddle
+      ctx.fillStyle = '#0f172a';
+      ctx.beginPath();
+      ctx.roundRect(-w / 2, -h / 2, w, h, [14, 14, 18, 18]);
+      ctx.fill();
+
+      // White belly
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.ellipse(0, 4, w * 0.28, h * 0.38, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Beady eyes
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(-w * 0.14, -6, 4, 0, Math.PI * 2);
+      ctx.arc(w * 0.14, -6, 4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#0f172a';
+      ctx.beginPath();
+      ctx.arc(-w * 0.14, -6, 2, 0, Math.PI * 2);
+      ctx.arc(w * 0.14, -6, 2, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Orange beak
+      ctx.fillStyle = '#f97316';
+      ctx.beginPath();
+      ctx.moveTo(0, -8);
+      ctx.lineTo(-5, -2);
+      ctx.lineTo(5, -2);
+      ctx.closePath();
+      ctx.fill();
+
+      // Orange feet
+      [-w * 0.15, w * 0.15].forEach((fx) => {
+        ctx.beginPath();
+        ctx.arc(fx, h / 2 - 1, 5, 0, Math.PI);
+        ctx.fill();
+      });
+
+    } else if (skin === 'bear') {
+      // Teddy Bear
+      const bearGrad = ctx.createLinearGradient(0, -h / 2, 0, h / 2);
+      bearGrad.addColorStop(0, '#a16207');
+      bearGrad.addColorStop(1, '#78350f');
+      ctx.fillStyle = bearGrad;
+      ctx.beginPath();
+      ctx.roundRect(-w / 2, -h / 2, w, h, [14, 14, 18, 18]);
+      ctx.fill();
+      ctx.strokeStyle = '#451a03';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Round bear ears
+      [-w * 0.35, w * 0.35].forEach((ex) => {
+        ctx.fillStyle = '#a16207';
+        ctx.beginPath();
+        ctx.arc(ex, -h / 2, 9, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#fde68a';
+        ctx.beginPath();
+        ctx.arc(ex, -h / 2, 5, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      // Tan muzzle oval
+      ctx.fillStyle = '#fef3c7';
+      ctx.beginPath();
+      ctx.ellipse(0, 3, 14, 10, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Button nose & smile
+      ctx.fillStyle = '#451a03';
+      ctx.beginPath();
+      ctx.arc(0, 0, 3.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#451a03';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(0, 3, 5, 0.2, Math.PI - 0.2);
+      ctx.stroke();
+
+      // Shiny button eyes
+      [-w * 0.2, w * 0.2].forEach((bx) => {
+        ctx.fillStyle = '#1e1b4b';
+        ctx.beginPath();
+        ctx.arc(bx, -5, 3.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#fff';
+        ctx.beginPath();
+        ctx.arc(bx - 1, -6, 1.2, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+    } else if (skin === 'avocado') {
+      // Holy Guac
+      ctx.fillStyle = '#14532d';
+      ctx.beginPath();
+      ctx.roundRect(-w / 2, -h / 2, w, h, [14, 14, 18, 18]);
+      ctx.fill();
+
+      // Creamy lime-green meat
+      const avoGrad = ctx.createLinearGradient(0, -h / 2, 0, h / 2);
+      avoGrad.addColorStop(0, '#bef264');
+      avoGrad.addColorStop(1, '#84cc16');
+      ctx.fillStyle = avoGrad;
+      ctx.beginPath();
+      ctx.roundRect(-w * 0.44, -h / 2 + 4, w * 0.88, h - 8, 12);
+      ctx.fill();
+
+      // Brown avocado pit
+      const pitGrad = ctx.createRadialGradient(-3, 1, 2, 0, 3, 12);
+      pitGrad.addColorStop(0, '#a16207');
+      pitGrad.addColorStop(1, '#451a03');
+      ctx.fillStyle = pitGrad;
+      ctx.beginPath();
+      ctx.arc(0, 3, 11, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Glossy highlight
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+      ctx.beginPath();
+      ctx.arc(-4, 0, 3, 0, Math.PI * 2);
+      ctx.fill();
+
+    } else if (skin === 'donut') {
+      // Donut Glaze
+      ctx.fillStyle = '#d97706';
+      ctx.beginPath();
+      ctx.roundRect(-w / 2, -h / 2, w, h, [14, 14, 18, 18]);
+      ctx.fill();
+
+      // Strawberry glaze
+      ctx.fillStyle = '#f472b6';
+      ctx.beginPath();
+      ctx.roundRect(-w * 0.46, -h / 2 + 2, w * 0.92, h * 0.65, 10);
+      ctx.fill();
+      [-w * 0.3, -w * 0.1, w * 0.12, w * 0.32].forEach((dx) => {
+        ctx.beginPath();
+        ctx.arc(dx, -h / 2 + h * 0.65, 4.5, 0, Math.PI);
+        ctx.fill();
+      });
+
+      // Rainbow sprinkles
+      const donutSprinkles = ['#38bdf8', '#facc15', '#4ade80', '#ffffff', '#c084fc'];
+      [[-w * 0.32, -4], [-w * 0.18, 2], [0, -5], [w * 0.18, 1], [w * 0.32, -3]].forEach(([sx, sy], i) => {
+        ctx.fillStyle = donutSprinkles[i % donutSprinkles.length];
+        ctx.fillRect(sx, sy, 5, 2.5);
+      });
+
+    } else if (skin === 'shark') {
+      // Chompy Shark
+      const sharkGrad = ctx.createLinearGradient(-w / 2, 0, w / 2, 0);
+      sharkGrad.addColorStop(0, '#0369a1');
+      sharkGrad.addColorStop(0.5, '#0284c7');
+      sharkGrad.addColorStop(1, '#075985');
+      ctx.fillStyle = sharkGrad;
+      ctx.beginPath();
+      ctx.roundRect(-w / 2, -h / 2, w, h, [12, 12, 16, 16]);
+      ctx.fill();
+
+      // Dorsal Fin
+      ctx.fillStyle = '#0369a1';
+      ctx.beginPath();
+      ctx.moveTo(-w * 0.38, -h / 2);
+      ctx.lineTo(-w * 0.28, -h / 2 - 14);
+      ctx.lineTo(-w * 0.16, -h / 2);
+      ctx.closePath();
+      ctx.fill();
+
+      // Sharp white teeth
+      ctx.fillStyle = '#ffffff';
+      const toothWidth = 8;
+      for (let tx = -w * 0.36; tx <= w * 0.36; tx += toothWidth) {
+        ctx.beginPath();
+        ctx.moveTo(tx, -h / 2);
+        ctx.lineTo(tx + toothWidth / 2, -h / 2 + 7);
+        ctx.lineTo(tx + toothWidth, -h / 2);
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      // Shark eye
+      ctx.fillStyle = '#000000';
+      ctx.beginPath();
+      ctx.arc(w * 0.28, -2, 3.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(w * 0.28 - 1, -3, 1, 0, Math.PI * 2);
+      ctx.fill();
+
+    } else if (skin === 'burger') {
+      // Burger Basket
+      // Bottom bun
+      ctx.fillStyle = '#d97706';
+      ctx.beginPath();
+      ctx.roundRect(-w / 2, h / 2 - 8, w, 8, [0, 0, 10, 10]);
+      ctx.fill();
+
+      // Beef patty
+      ctx.fillStyle = '#451a03';
+      ctx.fillRect(-w * 0.48, h / 2 - 16, w * 0.96, 8);
+
+      // Melted cheddar cheese
+      ctx.fillStyle = '#facc15';
+      ctx.beginPath();
+      ctx.moveTo(-w * 0.46, h / 2 - 16);
+      ctx.lineTo(w * 0.46, h / 2 - 16);
+      ctx.lineTo(w * 0.4, h / 2 - 8);
+      ctx.lineTo(-w * 0.4, h / 2 - 8);
+      ctx.closePath();
+      ctx.fill();
+
+      // Wavy green lettuce
+      ctx.fillStyle = '#22c55e';
+      ctx.beginPath();
+      ctx.roundRect(-w * 0.48, h / 2 - 22, w * 0.96, 6, 3);
+      ctx.fill();
+
+      // Top bun
+      ctx.fillStyle = '#d97706';
+      ctx.beginPath();
+      ctx.roundRect(-w / 2, -h / 2, w, 14, [12, 12, 0, 0]);
+      ctx.fill();
+
+      // Sesame seeds
+      ctx.fillStyle = '#fef3c7';
+      [[-w * 0.3, -h / 2 + 5], [-w * 0.1, -h / 2 + 4], [w * 0.1, -h / 2 + 4], [w * 0.3, -h / 2 + 5]].forEach(([sx, sy]) => {
+        ctx.fillRect(sx, sy, 3, 1.5);
+      });
+
+    } else if (skin === 'bat') {
+      // Night Bat
+      ctx.fillStyle = '#1e1b4b';
+      ctx.beginPath();
+      ctx.roundRect(-w / 2, -h / 2, w, h, [12, 12, 16, 16]);
+      ctx.fill();
+
+      // Violet edge glow
+      ctx.strokeStyle = '#a855f7';
+      ctx.lineWidth = 2;
+      ctx.shadowColor = '#a855f7';
+      ctx.shadowBlur = 10;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      // Bat ears
+      [-1, 1].forEach((dir) => {
+        ctx.fillStyle = '#312e81';
+        ctx.beginPath();
+        ctx.moveTo(dir * w * 0.4, -h / 2);
+        ctx.lineTo(dir * w * 0.3, -h / 2 - 14);
+        ctx.lineTo(dir * w * 0.18, -h / 2);
+        ctx.closePath();
+        ctx.fill();
+        ctx.fillStyle = '#f472b6';
+        ctx.beginPath();
+        ctx.moveTo(dir * w * 0.35, -h / 2);
+        ctx.lineTo(dir * w * 0.3, -h / 2 - 10);
+        ctx.lineTo(dir * w * 0.22, -h / 2);
+        ctx.closePath();
+        ctx.fill();
+      });
+
+      // Amber eyes
+      ctx.fillStyle = '#fde047';
+      ctx.beginPath();
+      ctx.arc(-w * 0.18, -2, 3.5, 0, Math.PI * 2);
+      ctx.arc(w * 0.18, -2, 3.5, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Vampire fangs
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.moveTo(-6, 5);
+      ctx.lineTo(-3, 11);
+      ctx.lineTo(0, 5);
+      ctx.moveTo(0, 5);
+      ctx.lineTo(3, 11);
+      ctx.lineTo(6, 5);
+      ctx.fill();
+
+    } else if (skin === 'taco') {
+      // Crispy Taco
+      ctx.fillStyle = '#ca8a04';
+      ctx.beginPath();
+      ctx.arc(0, -h / 2, w / 2, 0, Math.PI);
+      ctx.fill();
+
+      // Beef filling
+      ctx.fillStyle = '#713f12';
+      ctx.beginPath();
+      ctx.arc(0, -h / 2, w * 0.42, 0, Math.PI);
+      ctx.fill();
+
+      // Cheese & lettuce bits
+      [-w * 0.3, -w * 0.15, 0, w * 0.15, w * 0.3].forEach((tx, i) => {
+        ctx.fillStyle = i % 2 === 0 ? '#facc15' : '#22c55e';
+        ctx.fillRect(tx, -h / 2 + 2, 8, 4);
+      });
+      // Diced tomato
+      ctx.fillStyle = '#ef4444';
+      [[-w * 0.2, 0], [w * 0.1, 3], [-w * 0.05, 5]].forEach(([rx, ry]) => {
+        ctx.fillRect(rx, ry, 4, 4);
+      });
+
+    } else if (skin === 'lion') {
+      // Lion Roar
+      ctx.fillStyle = '#78350f';
+      for (let a = 0; a < Math.PI * 2; a += Math.PI / 6) {
+        ctx.beginPath();
+        ctx.arc(Math.cos(a) * w * 0.46, Math.sin(a) * h * 0.46, 10, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      ctx.fillStyle = '#f59e0b';
+      ctx.beginPath();
+      ctx.roundRect(-w * 0.44, -h / 2, w * 0.88, h, 14);
+      ctx.fill();
+
+      // Crown
+      ctx.fillStyle = '#fde047';
+      ctx.beginPath();
+      ctx.moveTo(-10, -h / 2);
+      ctx.lineTo(-14, -h / 2 - 8);
+      ctx.lineTo(-6, -h / 2 - 4);
+      ctx.lineTo(0, -h / 2 - 10);
+      ctx.lineTo(6, -h / 2 - 4);
+      ctx.lineTo(14, -h / 2 - 8);
+      ctx.lineTo(10, -h / 2);
+      ctx.closePath();
+      ctx.fill();
+
+      // Muzzle
+      ctx.fillStyle = '#fef3c7';
+      ctx.beginPath();
+      ctx.ellipse(0, 4, 10, 8, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#451a03';
+      ctx.beginPath();
+      ctx.arc(0, 1, 3.5, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Eyes
+      [-w * 0.18, w * 0.18].forEach((lx) => {
+        ctx.fillStyle = '#451a03';
+        ctx.beginPath();
+        ctx.arc(lx, -4, 3, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+    } else if (skin === 'rocket') {
+      // Rocket Booster
+      const rocketGrad = ctx.createLinearGradient(0, -h / 2, 0, h / 2);
+      rocketGrad.addColorStop(0, '#f8fafc');
+      rocketGrad.addColorStop(1, '#cbd5e1');
+      ctx.fillStyle = rocketGrad;
+      ctx.beginPath();
+      ctx.roundRect(-w / 2, -h / 2, w, h, [6, 6, 14, 14]);
+      ctx.fill();
+
+      // Red racing stripe
+      ctx.fillStyle = '#ef4444';
+      ctx.fillRect(-w / 2, -h / 2 + 6, w, 5);
+
+      // Red wing fins
+      [-1, 1].forEach((dir) => {
+        ctx.beginPath();
+        ctx.moveTo(dir * w / 2, -h / 4);
+        ctx.lineTo(dir * (w / 2 + 10), h / 2);
+        ctx.lineTo(dir * w / 2, h / 2);
+        ctx.closePath();
+        ctx.fill();
+      });
+
+      // Circular porthole
+      ctx.fillStyle = '#0284c7';
+      ctx.beginPath();
+      ctx.arc(0, 2, 7, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#94a3b8';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Exhaust flame
+      const flameGrad = ctx.createLinearGradient(0, h / 2, 0, h / 2 + 12);
+      flameGrad.addColorStop(0, '#fef08a');
+      flameGrad.addColorStop(0.5, '#f97316');
+      flameGrad.addColorStop(1, 'rgba(239, 68, 68, 0)');
+      ctx.fillStyle = flameGrad;
+      ctx.beginPath();
+      ctx.moveTo(-w * 0.25, h / 2);
+      ctx.lineTo(0, h / 2 + 14);
+      ctx.lineTo(w * 0.25, h / 2);
+      ctx.closePath();
+      ctx.fill();
+
+    } else if (skin === 'viking') {
+      // Viking Longboat
+      const vikGrad = ctx.createLinearGradient(0, -h / 2, 0, h / 2);
+      vikGrad.addColorStop(0, '#543d2b');
+      vikGrad.addColorStop(1, '#2e1e12');
+      ctx.fillStyle = vikGrad;
+      ctx.beginPath();
+      ctx.moveTo(-w / 2 - 4, -h / 2);
+      ctx.lineTo(w / 2 + 4, -h / 2);
+      ctx.lineTo(w * 0.38, h / 2);
+      ctx.lineTo(-w * 0.38, h / 2);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = '#1a110a';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Dragon prow
+      ctx.fillStyle = '#543d2b';
+      ctx.beginPath();
+      ctx.moveTo(-w / 2, -h / 2);
+      ctx.quadraticCurveTo(-w / 2 - 12, -h / 2 - 12, -w / 2 - 6, -h / 2 - 18);
+      ctx.quadraticCurveTo(-w / 2 - 2, -h / 2 - 14, -w / 2 + 4, -h / 2);
+      ctx.fill();
+
+      // Shields
+      const shieldCols = ['#dc2626', '#facc15', '#dc2626', '#facc15'];
+      [-w * 0.28, -w * 0.1, w * 0.1, w * 0.28].forEach((sx, i) => {
+        ctx.fillStyle = shieldCols[i];
+        ctx.beginPath();
+        ctx.arc(sx, 0, 7, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#475569';
+        ctx.beginPath();
+        ctx.arc(sx, 0, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+    } else if (skin === 'blackhole') {
+      // Black Hole
+      const diskGrad = ctx.createRadialGradient(0, 0, 10, 0, 0, w * 0.55);
+      diskGrad.addColorStop(0, '#000000');
+      diskGrad.addColorStop(0.3, '#f43f5e');
+      diskGrad.addColorStop(0.6, '#a855f7');
+      diskGrad.addColorStop(0.9, '#38bdf8');
+      diskGrad.addColorStop(1, 'rgba(56, 189, 248, 0)');
+      ctx.fillStyle = diskGrad;
+      ctx.shadowColor = '#ec4899';
+      ctx.shadowBlur = 18;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, w * 0.52, h * 0.8, -0.15, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Singularity core
+      ctx.fillStyle = '#000000';
+      ctx.beginPath();
+      ctx.arc(0, 0, 14, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Photon ring
+      ctx.strokeStyle = '#fde047';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(0, 0, 14.5, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.shadowBlur = 0;
 
     } else {
       // Classic Woven Wicker Basket
