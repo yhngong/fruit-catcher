@@ -295,10 +295,17 @@
   const btnOpenHowToPlay = document.getElementById('btnOpenHowToPlay');
   const btnCloseHowToPlay = document.getElementById('btnCloseHowToPlay');
 
-  // Mobile Touch Controls
-  const btnTouchLeft = document.getElementById('btnTouchLeft');
-  const btnTouchRight = document.getElementById('btnTouchRight');
-  const mobileControls = document.getElementById('mobileControls');
+  // Dedicated Bottom Controls: Scroll Bar / Slider (for Mobile & PC)
+  const bottomScrollDock = document.getElementById('bottomScrollDock');
+  const basketScrollTrack = document.getElementById('basketScrollTrack');
+  const scrollTrackRail = document.getElementById('scrollTrackRail');
+  const basketScrollProgress = document.getElementById('basketScrollProgress');
+  const basketScrollThumb = document.getElementById('basketScrollThumb');
+  const thumbIcon = document.getElementById('thumbIcon');
+  const scrollEdgeLeft = document.getElementById('scrollEdgeLeft');
+  const scrollEdgeRight = document.getElementById('scrollEdgeRight');
+
+  let isDraggingScroll = false;
 
   // --- Storage & Initialization ---
   function loadPersistedData() {
@@ -326,6 +333,7 @@
     } catch (e) {}
 
     coinsVal.textContent = coins;
+    updateScrollThumbSkinIcon();
     updateModeUI();
   }
 
@@ -375,6 +383,9 @@
       btnPlayAgain.textContent = isHard ? 'PLAY AGAIN (HARD) 🔥' : 'PLAY AGAIN';
     }
 
+    if (scrollTrackRail) scrollTrackRail.classList.toggle('hard', isHard);
+    if (basketScrollThumb) basketScrollThumb.classList.toggle('hard', isHard);
+
     const currentHigh = isHard ? highScoreHard : highScoreNormal;
     if (highScoreVal) highScoreVal.textContent = currentHigh;
     if (hardModeBadge) {
@@ -384,6 +395,48 @@
         hardModeBadge.classList.add('hidden');
       }
     }
+  }
+
+  function updateScrollThumbSkinIcon() {
+    if (!thumbIcon) return;
+    const skin = BASKET_SKINS.find(s => s.id === basket.skin);
+    thumbIcon.textContent = skin ? skin.icon : '🧺';
+  }
+
+  function updateScrollThumbUI(ratio) {
+    if (!scrollTrackRail || !basketScrollThumb) return;
+    const r = Math.max(0, Math.min(1, ratio));
+    const railWidth = scrollTrackRail.clientWidth || 300;
+    const thumbWidth = basketScrollThumb.offsetWidth || 62;
+    const maxTravel = Math.max(0, railWidth - thumbWidth);
+    const leftPx = r * maxTravel;
+
+    basketScrollThumb.style.left = `${leftPx}px`;
+    if (basketScrollProgress) {
+      basketScrollProgress.style.width = `${leftPx + thumbWidth / 2}px`;
+    }
+  }
+
+  function handleScrollPointer(e) {
+    if (gameState === 'PAUSED' || gameState === 'GAMEOVER') return;
+    const rect = scrollTrackRail.getBoundingClientRect();
+    if (rect.width <= 0) return;
+    const thumbWidth = basketScrollThumb.offsetWidth || 62;
+    const usableWidth = rect.width - thumbWidth;
+    if (usableWidth <= 0) return;
+
+    // Center thumb under pointer
+    const clickX = e.clientX - rect.left - thumbWidth / 2;
+    const ratio = Math.max(0, Math.min(1, clickX / usableWidth));
+
+    const canvasWidth = canvasContainer.clientWidth || 400;
+    const minX = basket.width / 2;
+    const maxX = canvasWidth - basket.width / 2;
+
+    basket.targetX = minX + ratio * (maxX - minX);
+    basket.x = basket.targetX;
+
+    updateScrollThumbUI(ratio);
   }
 
   function resizeCanvas() {
@@ -397,6 +450,13 @@
     if (basket.x === 0) {
       basket.x = rect.width / 2;
       basket.targetX = basket.x;
+    }
+
+    const minX = basket.width / 2;
+    const maxX = rect.width - basket.width / 2;
+    const playableWidth = maxX - minX;
+    if (playableWidth > 0) {
+      updateScrollThumbUI((basket.x - minX) / playableWidth);
     }
   }
 
@@ -564,6 +624,16 @@
     basket.x += (basket.targetX - basket.x) * Math.min(1, dt * 30);
     basket.vx = basket.x - prevX;
     basket.tilt = Math.max(-0.25, Math.min(0.25, basket.vx * 0.03));
+
+    // Sync scrollbar thumb position to basket if not currently dragging scrollbar
+    if (!isDraggingScroll) {
+      const minX = basket.width / 2;
+      const maxX = width - basket.width / 2;
+      const playableWidth = maxX - minX;
+      if (playableWidth > 0) {
+        updateScrollThumbUI((basket.x - minX) / playableWidth);
+      }
+    }
 
     // 2. Power-up & Fever Timers
     if (magnetTimer > 0) {
@@ -2968,6 +3038,7 @@
         } else if (isOwned) {
           basket.skin = skin.id;
           savePersistedData();
+          updateScrollThumbSkinIcon();
           renderShop();
           playSound('powerup');
         }
@@ -2985,6 +3056,7 @@
       unlockedSkins.push(skin.id);
       basket.skin = skin.id;
       savePersistedData();
+      updateScrollThumbSkinIcon();
       renderShop();
       updateHUD();
       playSound('fever');
@@ -3020,45 +3092,87 @@
       basket.targetX = e.clientX - rect.left;
     });
 
-    // Touch controls on screen (Fast, Responsive & No Text Copy Glitch)
-    const handleLeftStart = (e) => {
-      e.preventDefault();
-      keys.left = true;
-      basket.targetX -= 55; // Immediate impulse on tap
-    };
-    const handleLeftEnd = (e) => {
-      if (e && e.cancelable) e.preventDefault();
-      keys.left = false;
-    };
+    // Interactive Bottom Scroll Bar / Slider for Mobile & PC
+    if (scrollTrackRail) {
+      const onPointerDown = (e) => {
+        if (e.cancelable) e.preventDefault();
+        isDraggingScroll = true;
+        try {
+          scrollTrackRail.setPointerCapture(e.pointerId);
+        } catch (err) {}
+        if (basketScrollThumb) basketScrollThumb.classList.add('active-dragging');
+        handleScrollPointer(e);
+      };
 
-    const handleRightStart = (e) => {
-      e.preventDefault();
-      keys.right = true;
-      basket.targetX += 55; // Immediate impulse on tap
-    };
-    const handleRightEnd = (e) => {
-      if (e && e.cancelable) e.preventDefault();
-      keys.right = false;
-    };
+      const onPointerMove = (e) => {
+        if (!isDraggingScroll) return;
+        if (e.cancelable) e.preventDefault();
+        handleScrollPointer(e);
+      };
 
-    btnTouchLeft.addEventListener('pointerdown', handleLeftStart);
-    btnTouchLeft.addEventListener('pointerup', handleLeftEnd);
-    btnTouchLeft.addEventListener('pointerleave', handleLeftEnd);
-    btnTouchLeft.addEventListener('pointercancel', handleLeftEnd);
+      const onPointerUp = (e) => {
+        if (!isDraggingScroll) return;
+        isDraggingScroll = false;
+        try {
+          scrollTrackRail.releasePointerCapture(e.pointerId);
+        } catch (err) {}
+        if (basketScrollThumb) basketScrollThumb.classList.remove('active-dragging');
+      };
 
-    btnTouchRight.addEventListener('pointerdown', handleRightStart);
-    btnTouchRight.addEventListener('pointerup', handleRightEnd);
-    btnTouchRight.addEventListener('pointerleave', handleRightEnd);
-    btnTouchRight.addEventListener('pointercancel', handleRightEnd);
+      scrollTrackRail.addEventListener('pointerdown', onPointerDown);
+      scrollTrackRail.addEventListener('pointermove', onPointerMove);
+      scrollTrackRail.addEventListener('pointerup', onPointerUp);
+      scrollTrackRail.addEventListener('pointercancel', onPointerUp);
+      scrollTrackRail.addEventListener('lostpointercapture', onPointerUp);
 
-    // Prevent context menu, callout popups, and text selection on mobile buttons
-    ['contextmenu', 'selectstart', 'dragstart'].forEach((evt) => {
-      btnTouchLeft.addEventListener(evt, (e) => e.preventDefault(), { passive: false });
-      btnTouchRight.addEventListener(evt, (e) => e.preventDefault(), { passive: false });
-      if (mobileControls) {
-        mobileControls.addEventListener(evt, (e) => e.preventDefault(), { passive: false });
+      // Keyboard accessibility for slider thumb
+      if (basketScrollThumb) {
+        basketScrollThumb.addEventListener('keydown', (e) => {
+          if (gameState !== 'PLAYING') return;
+          if (e.code === 'ArrowLeft' || e.code === 'KeyA') {
+            basket.targetX -= 40;
+          } else if (e.code === 'ArrowRight' || e.code === 'KeyD') {
+            basket.targetX += 40;
+          }
+        });
       }
-    });
+    }
+
+    // Edge Nudge buttons ◀ and ▶
+    let edgeNudgeTimer = null;
+    const startNudge = (dir, e) => {
+      if (e && e.cancelable) e.preventDefault();
+      if (gameState !== 'PLAYING') return;
+      basket.targetX += dir * 65;
+      clearInterval(edgeNudgeTimer);
+      edgeNudgeTimer = setInterval(() => {
+        if (gameState === 'PLAYING') basket.targetX += dir * 25;
+      }, 40);
+    };
+    const stopNudge = (e) => {
+      if (e && e.cancelable) e.preventDefault();
+      clearInterval(edgeNudgeTimer);
+    };
+
+    if (scrollEdgeLeft) {
+      scrollEdgeLeft.addEventListener('pointerdown', (e) => startNudge(-1, e));
+      scrollEdgeLeft.addEventListener('pointerup', stopNudge);
+      scrollEdgeLeft.addEventListener('pointerleave', stopNudge);
+      scrollEdgeLeft.addEventListener('pointercancel', stopNudge);
+    }
+    if (scrollEdgeRight) {
+      scrollEdgeRight.addEventListener('pointerdown', (e) => startNudge(1, e));
+      scrollEdgeRight.addEventListener('pointerup', stopNudge);
+      scrollEdgeRight.addEventListener('pointerleave', stopNudge);
+      scrollEdgeRight.addEventListener('pointercancel', stopNudge);
+    }
+
+    // Prevent context menu, callout popups, and text selection on bottom dock
+    if (bottomScrollDock) {
+      ['contextmenu', 'selectstart', 'dragstart'].forEach((evt) => {
+        bottomScrollDock.addEventListener(evt, (e) => e.preventDefault(), { passive: false });
+      });
+    }
 
     // Mode Selection Buttons
     if (btnModeNormal) btnModeNormal.addEventListener('click', () => setGameMode('NORMAL'));

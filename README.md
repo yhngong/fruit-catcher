@@ -35,8 +35,8 @@ A juicy, fast-paced arcade fruit-catching game built with pure HTML5 Canvas, mod
     - 🟢 **Green (The Legendary 10,000 Coins Apex Skin)**
 - 🔊 **Procedural Web Audio Engine**:
   - Pitch-shifting catch pops, golden twinkling arpeggios, bomb explosions, and victory fanfares synthesized dynamically in-browser via the Web Audio API (zero audio files downloaded).
-- 📱 **Mobile Touch Controls**:
-  - Drag or tap on-screen arrows and Dash button. PWA-ready for offline play.
+- 📱 **Interactive Drag Scroll Bar (Mobile & PC)**:
+  - Drag the ergonomic bottom scroll bar across the rail to steer the basket with zero latency. Includes edge nudge arrows (`◀` / `▶`) and skin-matching thumb icons. PWA-ready for offline play.
 
 ---
 
@@ -44,9 +44,9 @@ A juicy, fast-paced arcade fruit-catching game built with pure HTML5 Canvas, mod
 
 | Platform | Controls |
 | :--- | :--- |
-| **Keyboard** | `Left` / `Right` Arrow keys or `A` / `D` to move • `Space` to Dash • `P` or `Esc` to Pause • `M` to Mute |
-| **Mouse** | Move mouse horizontally across the screen to steer the basket |
-| **Touch / Mobile** | Drag finger across the screen or use the on-screen `◀` / `▶` and `⚡ DASH` buttons |
+| **All Platforms (Mobile & PC)** | **Drag the bottom scroll bar** to steer the basket smoothly across the screen • Tap `◀` / `▶` to nudge |
+| **Keyboard** | `Left` / `Right` Arrow keys or `A` / `D` to steer • `P` or `Esc` to Pause • `M` to Mute |
+| **Mouse / Touch** | Hover or drag horizontally directly on the play area or use the bottom scroll bar |
 
 ---
 
