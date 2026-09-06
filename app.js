@@ -261,7 +261,7 @@
     canvas.height = rect.height * dpr;
     ctx.scale(dpr, dpr);
 
-    basket.y = rect.height - basket.height - 35;
+    basket.y = rect.height - basket.height - 18;
     if (basket.x === 0) {
       basket.x = rect.width / 2;
       basket.targetX = basket.x;

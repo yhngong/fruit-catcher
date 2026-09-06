@@ -159,12 +159,16 @@
       </div>
     </div>
 
-    <!-- On-screen Mobile Touch Controls -->
-    <div class="mobile-touch-controls" id="mobileControls">
-      <button id="btnTouchLeft" class="touch-ctrl-btn" aria-label="Move Left">◀</button>
-      <button id="btnTouchDash" class="touch-ctrl-btn dash-btn" aria-label="Dash">⚡ DASH</button>
-      <button id="btnTouchRight" class="touch-ctrl-btn" aria-label="Move Right">▶</button>
-    </div>
+    <!-- Dedicated Bottom Controls Dock (Separated and Moved Down) -->
+    <footer class="bottom-controls-dock" id="mobileControls">
+      <div class="move-group">
+        <button id="btnTouchLeft" class="touch-ctrl-btn move-btn" aria-label="Move Left">◀</button>
+        <button id="btnTouchRight" class="touch-ctrl-btn move-btn" aria-label="Move Right">▶</button>
+      </div>
+      <div class="action-group">
+        <button id="btnTouchDash" class="touch-ctrl-btn dash-btn" aria-label="Dash">⚡ DASH</button>
+      </div>
+    </footer>
 
     <!-- Shop Modal -->
     <div id="shopModal" class="modal-backdrop hidden">
