@@ -1,6 +1,12 @@
 /**
  * Fruit Catcher Arcade — Complete Game Engine
  * Pure HTML5 Canvas, Web Audio API procedural sound, and zero dependencies.
+ *
+ * Credits & Audio Attribution:
+ * - Game Design & Development: Yolet Gong
+ * - Dynamic Procedural Chiptune Music & Sound Engine: Antigravity (Google DeepMind) & Yolet Gong
+ *   Synthesized in real time using native Web Audio API oscillators, biquad filters, and step sequencers.
+ *   Zero external audio files, samples, or third-party libraries used.
  */
 
 (() => {
@@ -128,6 +134,8 @@
   }
 
   // --- Background Music Synthesizer Engine ---
+  // Music & Sound Design: Procedurally composed and synthesized by Antigravity & Yolet Gong.
+  // 100% native Web Audio API (zero audio files downloaded).
   let bgmGainNode = null;
   let bgmFilterNode = null;
   let isMusicMuted = false;

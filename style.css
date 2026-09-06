@@ -515,6 +515,18 @@ body {
   color: #38bdf8;
 }
 
+.credits-tag {
+  font-size: 0.70rem;
+  color: #94a3b8;
+  margin-top: 10px;
+  opacity: 0.88;
+  text-align: center;
+}
+
+.credits-tag strong {
+  color: #fde047;
+}
+
 /* Game Over Stats */
 .game-over-title {
   font-size: 1.7rem;
