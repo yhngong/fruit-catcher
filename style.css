@@ -150,20 +150,42 @@ body {
   gap: 6px;
 }
 
-.lives-container {
-  display: flex;
-  gap: 2px;
-  font-size: 0.9rem;
+.timer-pill {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.5);
+  min-width: 68px;
+  justify-content: center;
 }
 
-.heart {
-  transition: transform 0.2s, opacity 0.2s;
+.timer-icon {
+  font-size: 0.85rem;
 }
 
-.heart.lost {
-  opacity: 0.25;
-  filter: grayscale(1);
-  transform: scale(0.85);
+.timer-pill .hud-val {
+  color: #38bdf8;
+  font-size: 1rem;
+}
+
+.sec-unit {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-left: -2px;
+}
+
+.timer-pill.urgent {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: #ef4444;
+  animation: urgentPulse 0.5s infinite alternate ease-in-out;
+}
+
+.timer-pill.urgent .hud-val {
+  color: #ef4444;
+}
+
+@keyframes urgentPulse {
+  0% { transform: scale(1); box-shadow: 0 0 5px rgba(239, 68, 68, 0.4); }
+  100% { transform: scale(1.08); box-shadow: 0 0 16px rgba(239, 68, 68, 0.8); }
 }
 
 .btn-hud-icon {

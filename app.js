@@ -98,6 +98,30 @@
           osc.start(t + i * 0.07);
           osc.stop(t + i * 0.07 + 0.2);
         });
+      } else if (type === 'tick') {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(param > 2 ? 880 : 1200, t);
+        gain.gain.setValueAtTime(0.2, t);
+        gain.gain.exponentialRampToValueAtTime(0.01, t + 0.05);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(t);
+        osc.stop(t + 0.05);
+      } else if (type === 'timeup') {
+        [523.25, 493.88, 440, 349.23].forEach((f, i) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(f, t + i * 0.12);
+          gain.gain.setValueAtTime(0.3, t + i * 0.12);
+          gain.gain.exponentialRampToValueAtTime(0.01, t + i * 0.12 + 0.28);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(t + i * 0.12);
+          osc.stop(t + i * 0.12 + 0.28);
+        });
       }
     } catch (e) {}
   }
@@ -132,7 +156,9 @@
   let coins = 0;
   let totalCoinsEarned = 0;
   let fruitsCaught = 0;
-  let lives = 3;
+  const GAME_DURATION = 60;
+  let timeLeft = 60;
+  let lastTickSec = 60;
   let combo = 0;
   let maxCombo = 0;
   let feverMeter = 0;
@@ -178,7 +204,8 @@
   const coinsVal = document.getElementById('coinsVal');
   const feverMeterFill = document.getElementById('feverMeterFill');
   const feverLabel = document.getElementById('feverLabel');
-  const livesContainer = document.getElementById('livesContainer');
+  const timerPill = document.getElementById('timerPill');
+  const timerVal = document.getElementById('timerVal');
   const btnToggleSound = document.getElementById('btnToggleSound');
   const btnPause = document.getElementById('btnPause');
 
@@ -286,7 +313,8 @@
     score = 0;
     fruitsCaught = 0;
     totalCoinsEarned = 0;
-    lives = 3;
+    timeLeft = GAME_DURATION;
+    lastTickSec = 60;
     combo = 0;
     maxCombo = 0;
     feverMeter = 0;
@@ -306,6 +334,8 @@
     pauseOverlay.classList.add('hidden');
     gameOverOverlay.classList.add('hidden');
 
+    timerPill.classList.remove('urgent');
+    updateTimerHUD();
     updateHUD();
     playSound('powerup');
   }
@@ -323,9 +353,9 @@
     pauseOverlay.classList.add('hidden');
   }
 
-  function triggerGameOver() {
+  function triggerTimeUp() {
     gameState = 'GAMEOVER';
-    playSound('bomb');
+    playSound('timeup');
 
     if (score > highScore) {
       highScore = score;
@@ -344,6 +374,7 @@
 
     gameOverOverlay.classList.remove('hidden');
   }
+  const triggerGameOver = triggerTimeUp;
 
   // --- Game Loop ---
   function gameLoop(timestamp) {
@@ -364,6 +395,24 @@
     const rect = canvasContainer.getBoundingClientRect();
     const width = rect.width;
     const height = rect.height;
+
+    // 0. Countdown Timer
+    timeLeft -= dt;
+    if (timeLeft <= 0) {
+      timeLeft = 0;
+      updateTimerHUD();
+      triggerTimeUp();
+      return;
+    }
+    updateTimerHUD();
+
+    const currentSec = Math.ceil(timeLeft);
+    if (currentSec !== lastTickSec) {
+      if (currentSec <= 5 && currentSec > 0) {
+        playSound('tick', currentSec);
+      }
+      lastTickSec = currentSec;
+    }
 
     // 1. Update Basket Movement (Snappy & Fast)
     const speed = (basket.isDashing || keys.dash ? 1150 : 720) * dt;
@@ -507,17 +556,19 @@
       }
 
       // Bomb explosion hit
-      lives--;
+      score = Math.max(0, score - 50);
+      timeLeft = Math.max(0, timeLeft - 3);
       combo = 0;
       updateComboBadge();
-      updateLivesHUD();
+      updateTimerHUD();
+      updateHUD();
       screenShake = 18;
       playSound('bomb');
       createJuiceParticles(item.x, item.y, '#334155', 25);
-      addFloatingText(item.x, item.y, 'BOMB! -1 ❤️', '#ef4444');
+      addFloatingText(item.x, item.y, 'BOMB! -50 pts -3s 💣', '#ef4444');
 
-      if (lives <= 0) {
-        triggerGameOver();
+      if (timeLeft <= 0) {
+        triggerTimeUp();
       }
       return;
     }
@@ -534,7 +585,9 @@
       } else if (item.type === 'power_slow') {
         slowTimer = 6;
         badgeSlow.classList.remove('hidden');
-        addFloatingText(item.x, item.y, 'SLOW-MO! ⏱️', '#a855f7');
+        timeLeft = Math.min(GAME_DURATION, timeLeft + 5);
+        updateTimerHUD();
+        addFloatingText(item.x, item.y, '+5s BONUS TIME! ⏱️', '#a855f7');
       } else if (item.type === 'power_shield') {
         hasShield = true;
         badgeShield.classList.remove('hidden');
@@ -881,13 +934,17 @@
   function updateHUD() {
     scoreVal.textContent = score;
     coinsVal.textContent = coins + totalCoinsEarned;
+    updateTimerHUD();
   }
 
-  function updateLivesHUD() {
-    const hearts = livesContainer.querySelectorAll('.heart');
-    hearts.forEach((h, idx) => {
-      h.classList.toggle('lost', idx >= lives);
-    });
+  function updateTimerHUD() {
+    const displaySec = Math.ceil(timeLeft);
+    timerVal.textContent = displaySec;
+    if (displaySec <= 10) {
+      timerPill.classList.add('urgent');
+    } else {
+      timerPill.classList.remove('urgent');
+    }
   }
 
   function updateComboBadge() {

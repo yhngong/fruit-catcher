@@ -45,11 +45,10 @@
       </div>
 
       <div class="hud-right">
-        <!-- Lives Hearts -->
-        <div class="lives-container" id="livesContainer">
-          <span class="heart full" data-index="1">❤️</span>
-          <span class="heart full" data-index="2">❤️</span>
-          <span class="heart full" data-index="3">❤️</span>
+        <!-- 60-Second Countdown Timer -->
+        <div class="hud-pill timer-pill" id="timerPill" title="Time Remaining">
+          <span class="timer-icon">⏱️</span>
+          <span id="timerVal" class="hud-val">60</span><span class="sec-unit">s</span>
         </div>
         <!-- Sound Mute -->
         <button id="btnToggleSound" class="btn-hud-icon" title="Toggle Sound (M)" aria-label="Toggle Sound">
@@ -90,11 +89,11 @@
             <span class="logo-emoji">🍌</span>
           </div>
           <h1 class="game-title">FRUIT CATCHER</h1>
-          <p class="game-tagline">Catch fruits • Build combos • Avoid bombs!</p>
+          <p class="game-tagline">⏱️ 60-Second Blitz • Catch fruits • Build combos • Beat the clock!</p>
 
           <div class="title-actions">
             <button id="btnStartGame" class="btn-play pulse">
-              PLAY NOW
+              PLAY NOW (60s)
             </button>
             <button id="btnOpenShop" class="btn-secondary">
               🧺 Basket Skins
@@ -126,7 +125,7 @@
       <!-- 3. Game Over Overlay -->
       <div id="gameOverOverlay" class="screen-overlay hidden">
         <div class="game-over-card">
-          <h2 class="game-over-title">GAME OVER</h2>
+          <h2 class="game-over-title">TIME'S UP! ⏱️</h2>
           
           <div class="final-stats-grid">
             <div class="stat-box">
@@ -196,6 +195,13 @@
         </div>
         <div class="how-to-play-content">
           <div class="rule-item">
+            <span class="rule-icon">⏱️</span>
+            <div>
+              <strong>60-Second Time Attack!</strong>
+              <p>You have exactly 60 seconds to score as many points as possible. Beat the clock and set a record high score!</p>
+            </div>
+          </div>
+          <div class="rule-item">
             <span class="rule-icon">🍎</span>
             <div>
               <strong>Catch Falling Fruits</strong>
@@ -205,8 +211,8 @@
           <div class="rule-item">
             <span class="rule-icon">💣</span>
             <div>
-              <strong>Avoid Bombs!</strong>
-              <p>Catching a bomb costs 1 heart and resets your combo multiplier.</p>
+              <strong>Avoid Bombs! (-50 Pts & -3s)</strong>
+              <p>Catching a bomb costs -50 points, inflicts a -3 second penalty, and resets your combo multiplier.</p>
             </div>
           </div>
           <div class="rule-item">
@@ -220,7 +226,7 @@
             <span class="rule-icon">🧲</span>
             <div>
               <strong>Power-Ups</strong>
-              <p>Catch Magnets (pulls nearby fruit), Clocks (slows time), and Shields (blocks 1 bomb).</p>
+              <p>Catch Magnets (pulls nearby fruit), Clocks (+5s bonus time & slow-mo), and Shields (blocks 1 bomb).</p>
             </div>
           </div>
         </div>
