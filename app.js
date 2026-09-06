@@ -3754,6 +3754,7 @@
       const isOwned = unlockedSkins.includes(skin.id);
       const isActive = basket.skin === skin.id;
 
+      const card = document.createElement('div');
       const specialSkinIds = ['green', 'phoenix', 'kraken', 'titan', 'frost', 'eclipse', 'quantum', 'seraphim'];
       const specialSkinClass = specialSkinIds.includes(skin.id) ? `skin-${skin.id}` : '';
       card.className = `skin-card ${isActive ? 'active' : ''} ${specialSkinClass}`.trim();
