@@ -305,10 +305,6 @@
       if (activeSkin && unlockedSkins.includes(activeSkin)) {
         basket.skin = activeSkin;
       }
-
-      if (highScore >= 10000 && !unlockedSkins.includes('green')) {
-        unlockedSkins.push('green');
-      }
     } catch (e) {}
 
     highScoreVal.textContent = highScore;
@@ -412,10 +408,6 @@
       newHighBanner.classList.remove('hidden');
     } else {
       newHighBanner.classList.add('hidden');
-    }
-
-    if (highScore >= 10000 && !unlockedSkins.includes('green')) {
-      unlockedSkins.push('green');
     }
 
     coins += totalCoinsEarned;
@@ -2719,11 +2711,8 @@
       const card = document.createElement('div');
       card.className = `skin-card ${isActive ? 'active' : ''} ${skin.id === 'green' ? 'skin-green' : ''}`;
 
-      let buyBtnHtml = `<button class="skin-buy-btn" data-id="${skin.id}">🪙 ${skin.price}</button>`;
-      if (skin.id === 'green') {
-        const canUnlock = (highScore >= 10000) || (score >= 10000) || ((coins + totalCoinsEarned) >= 10000);
-        buyBtnHtml = `<button class="skin-buy-btn skin-buy-green" data-id="${skin.id}">${canUnlock ? '🔓 Unlock (10k Pts)' : '10,000 Pts / 🪙'}</button>`;
-      }
+      const buyBtnClass = skin.id === 'green' ? 'skin-buy-btn skin-buy-green' : 'skin-buy-btn';
+      const buyBtnHtml = `<button class="${buyBtnClass}" data-id="${skin.id}">🪙 ${skin.price.toLocaleString()}</button>`;
 
       card.innerHTML = `
         <span class="skin-preview-icon">${skin.icon}</span>
@@ -2753,34 +2742,6 @@
 
   function buySkin(skin) {
     const currentTotalCoins = coins + totalCoinsEarned;
-    if (skin.id === 'green') {
-      const hasPoints = (highScore >= 10000) || (score >= 10000);
-      const hasCoins = currentTotalCoins >= 10000;
-      if (hasPoints) {
-        if (!unlockedSkins.includes('green')) unlockedSkins.push('green');
-        basket.skin = 'green';
-        savePersistedData();
-        renderShop();
-        updateHUD();
-        playSound('fever');
-        alert('🎉 Congratulations! You unlocked the final Green skin with 10,000 points!');
-        return;
-      } else if (hasCoins) {
-        coins = currentTotalCoins - 10000;
-        totalCoinsEarned = 0;
-        if (!unlockedSkins.includes('green')) unlockedSkins.push('green');
-        basket.skin = 'green';
-        savePersistedData();
-        renderShop();
-        updateHUD();
-        playSound('fever');
-        return;
-      } else {
-        alert(`The Green skin requires 10,000 points or coins!\n\nYour Best Score: ${highScore} pts\nYour Coins: 🪙 ${currentTotalCoins}`);
-        return;
-      }
-    }
-
     if (currentTotalCoins >= skin.price) {
       coins = currentTotalCoins - skin.price;
       totalCoinsEarned = 0;
@@ -2791,7 +2752,7 @@
       updateHUD();
       playSound('fever');
     } else {
-      alert(`Not enough coins! You need 🪙 ${skin.price - currentTotalCoins} more.`);
+      alert(`Not enough coins! You need 🪙 ${(skin.price - currentTotalCoins).toLocaleString()} more.`);
     }
   }
 
