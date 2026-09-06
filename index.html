@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0284c7">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="Fruit Catcher Arcade — Fast-paced, juicy fruit catching game with combos, fever mode, and custom basket skins!">
+  
+  <title>Fruit Catcher Arcade 🍎🧺</title>
+  
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="game-wrapper">
+    <!-- Top HUD Bar -->
+    <header class="hud-header">
+      <div class="hud-left">
+        <div class="hud-pill score-pill">
+          <span class="hud-label">SCORE</span>
+          <span id="scoreVal" class="hud-val">0</span>
+        </div>
+        <div class="hud-pill high-score-pill">
+          <span class="hud-label">BEST</span>
+          <span id="highScoreVal" class="hud-val">0</span>
+        </div>
+        <div class="hud-pill coins-pill">
+          <span class="coin-icon">🪙</span>
+          <span id="coinsVal" class="hud-val">0</span>
+        </div>
+      </div>
+
+      <div class="hud-center">
+        <!-- Fever Meter -->
+        <div class="fever-meter-wrapper" title="Fever Meter">
+          <div class="fever-meter-track">
+            <div id="feverMeterFill" class="fever-meter-fill" style="width: 0%;"></div>
+          </div>
+          <span id="feverLabel" class="fever-label">FEVER</span>
+        </div>
+      </div>
+
+      <div class="hud-right">
+        <!-- Lives Hearts -->
+        <div class="lives-container" id="livesContainer">
+          <span class="heart full" data-index="1">❤️</span>
+          <span class="heart full" data-index="2">❤️</span>
+          <span class="heart full" data-index="3">❤️</span>
+        </div>
+        <!-- Sound Mute -->
+        <button id="btnToggleSound" class="btn-hud-icon" title="Toggle Sound (M)" aria-label="Toggle Sound">
+          🔊
+        </button>
+        <!-- Pause -->
+        <button id="btnPause" class="btn-hud-icon" title="Pause Game (P)" aria-label="Pause Game">
+          ⏸️
+        </button>
+      </div>
+    </header>
+
+    <!-- Active Power-up Status Badges Bar -->
+    <div id="powerupBar" class="powerup-bar">
+      <div id="badgeMagnet" class="powerup-badge hidden">🧲 Magnet <span class="timer">5s</span></div>
+      <div id="badgeSlow" class="powerup-badge hidden">⏱️ Slow-Mo <span class="timer">5s</span></div>
+      <div id="badgeShield" class="powerup-badge hidden">🛡️ Shield Active</div>
+    </div>
+
+    <!-- Active Combo Floating Badge -->
+    <div id="comboBadge" class="combo-badge hidden">
+      <span id="comboMultiplierText">2x</span>
+      <span class="combo-word">COMBO!</span>
+    </div>
+
+    <!-- Main Game Canvas Area -->
+    <div class="canvas-container" id="canvasContainer">
+      <canvas id="gameCanvas"></canvas>
+
+      <!-- Screen overlays -->
+
+      <!-- 1. Start / Title Overlay -->
+      <div id="startOverlay" class="screen-overlay">
+        <div class="title-card">
+          <div class="title-logo">
+            <span class="logo-emoji">🍎</span>
+            <span class="logo-emoji">🧺</span>
+            <span class="logo-emoji">🍌</span>
+          </div>
+          <h1 class="game-title">FRUIT CATCHER</h1>
+          <p class="game-tagline">Catch fruits • Build combos • Avoid bombs!</p>
+
+          <div class="title-actions">
+            <button id="btnStartGame" class="btn-play pulse">
+              PLAY NOW
+            </button>
+            <button id="btnOpenShop" class="btn-secondary">
+              🧺 Basket Skins
+            </button>
+            <button id="btnOpenHowToPlay" class="btn-secondary">
+              📖 How to Play
+            </button>
+          </div>
+
+          <div class="controls-hint">
+            <span>💻 <strong>Arrows / A & D / Mouse</strong> to move • <strong>Space</strong> to dash</span>
+            <span>📱 <strong>Drag on screen</strong> or tap sides on mobile</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Pause Overlay -->
+      <div id="pauseOverlay" class="screen-overlay hidden">
+        <div class="menu-card">
+          <h2>GAME PAUSED</h2>
+          <div class="menu-buttons">
+            <button id="btnResumeGame" class="btn-play">Resume</button>
+            <button id="btnRestartFromPause" class="btn-secondary">Restart</button>
+            <button id="btnQuitToTitle" class="btn-secondary">Main Menu</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Game Over Overlay -->
+      <div id="gameOverOverlay" class="screen-overlay hidden">
+        <div class="game-over-card">
+          <h2 class="game-over-title">GAME OVER</h2>
+          
+          <div class="final-stats-grid">
+            <div class="stat-box">
+              <span class="stat-label">FINAL SCORE</span>
+              <span id="finalScoreVal" class="stat-number">0</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-label">HIGH SCORE</span>
+              <span id="finalHighScoreVal" class="stat-number">0</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-label">FRUITS CAUGHT</span>
+              <span id="finalFruitsVal" class="stat-number">0</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-label">COINS EARNED</span>
+              <span id="finalCoinsVal" class="stat-number">🪙 0</span>
+            </div>
+          </div>
+
+          <div class="new-high-banner hidden" id="newHighBanner">
+            🎉 NEW HIGH SCORE! 🎉
+          </div>
+
+          <div class="game-over-actions">
+            <button id="btnPlayAgain" class="btn-play pulse">PLAY AGAIN</button>
+            <button id="btnShopFromOver" class="btn-secondary">🧺 Basket Shop</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- On-screen Mobile Touch Controls -->
+    <div class="mobile-touch-controls" id="mobileControls">
+      <button id="btnTouchLeft" class="touch-ctrl-btn" aria-label="Move Left">◀</button>
+      <button id="btnTouchDash" class="touch-ctrl-btn dash-btn" aria-label="Dash">⚡ DASH</button>
+      <button id="btnTouchRight" class="touch-ctrl-btn" aria-label="Move Right">▶</button>
+    </div>
+
+    <!-- Shop Modal -->
+    <div id="shopModal" class="modal-backdrop hidden">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>🧺 Basket Shop</h3>
+          <button id="btnCloseShop" class="btn-close-icon">&times;</button>
+        </div>
+        <div class="shop-coins-banner">
+          <span>Your Balance:</span>
+          <strong id="shopCoinsDisplay">🪙 0</strong>
+        </div>
+        <div class="skins-grid" id="skinsGrid">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </div>
+
+    <!-- How to Play Modal -->
+    <div id="howToPlayModal" class="modal-backdrop hidden">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>📖 How to Play</h3>
+          <button id="btnCloseHowToPlay" class="btn-close-icon">&times;</button>
+        </div>
+        <div class="how-to-play-content">
+          <div class="rule-item">
+            <span class="rule-icon">🍎</span>
+            <div>
+              <strong>Catch Falling Fruits</strong>
+              <p>Apples, Oranges, Bananas, Strawberries, Watermelons, and Pineapples award points and coins!</p>
+            </div>
+          </div>
+          <div class="rule-item">
+            <span class="rule-icon">💣</span>
+            <div>
+              <strong>Avoid Bombs!</strong>
+              <p>Catching a bomb costs 1 heart and resets your combo multiplier.</p>
+            </div>
+          </div>
+          <div class="rule-item">
+            <span class="rule-icon">⚡</span>
+            <div>
+              <strong>Combos & Fever Mode</strong>
+              <p>Catch fruits in a row without missing to build multipliers up to 5x. Filling the fever meter unleashes a Golden Fruit Rain shower!</p>
+            </div>
+          </div>
+          <div class="rule-item">
+            <span class="rule-icon">🧲</span>
+            <div>
+              <strong>Power-Ups</strong>
+              <p>Catch Magnets (pulls nearby fruit), Clocks (slows time), and Shields (blocks 1 bomb).</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

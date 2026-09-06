@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="sky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+    <linearGradient id="basket" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d97706" />
+      <stop offset="100%" stop-color="#92400e" />
+    </linearGradient>
+    <linearGradient id="apple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f87171" />
+      <stop offset="100%" stop-color="#dc2626" />
+    </linearGradient>
+    <linearGradient id="orange" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#ea580c" />
+    </linearGradient>
+  </defs>
+
+  <rect width="512" height="512" rx="110" fill="url(#sky)" />
+
+  <!-- Falling Fruit 1: Orange -->
+  <circle cx="180" cy="150" r="50" fill="url(#orange)" />
+  <ellipse cx="170" cy="135" rx="14" ry="8" fill="#ffffff" opacity="0.4" />
+  <path d="M180 100 Q195 85 210 95" stroke="#15803d" stroke-width="8" stroke-linecap="round" fill="none" />
+
+  <!-- Falling Fruit 2: Apple -->
+  <circle cx="330" cy="180" r="56" fill="url(#apple)" />
+  <ellipse cx="315" cy="160" rx="16" ry="10" fill="#ffffff" opacity="0.4" />
+  <path d="M330 125 C335 110, 345 105, 350 112" stroke="#78350f" stroke-width="8" stroke-linecap="round" fill="none" />
+  <path d="M350 112 Q370 110 375 125 Q355 130 350 112" fill="#22c55e" />
+
+  <!-- Catcher Basket -->
+  <path d="M 110 320 Q 256 300 402 320 L 370 420 Q 256 460 142 420 Z" fill="url(#basket)" />
+  <!-- Basket Rim -->
+  <ellipse cx="256" cy="320" rx="150" ry="24" fill="#b45309" />
+  <!-- Weave patterns -->
+  <path d="M 160 330 L 190 425 M 230 335 L 245 435 M 310 335 L 295 435 M 360 330 L 335 425" stroke="#78350f" stroke-width="6" stroke-linecap="round" />
+  
+  <!-- Star sparkles -->
+  <polygon points="256,70 262,86 278,92 262,98 256,114 250,98 234,92 250,86" fill="#fef08a" />
+</svg>
