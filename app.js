@@ -503,9 +503,12 @@
 
     finalScoreVal.textContent = score;
     finalFruitsVal.textContent = fruitsCaught;
-    finalCoinsVal.textContent = gameMode === 'HARD'
-      ? `🪙 +${totalCoinsEarned} (2x Hard Bonus!)`
-      : `🪙 +${totalCoinsEarned}`;
+    if (gameMode === 'HARD') {
+      const baseCoins = Math.floor(totalCoinsEarned / 2);
+      finalCoinsVal.innerHTML = `🪙 +${totalCoinsEarned} <span style="display:block;font-size:0.75rem;color:#facc15;font-weight:700;margin-top:2px;">(${baseCoins} × 2 Hard Mode)</span>`;
+    } else {
+      finalCoinsVal.textContent = `🪙 +${totalCoinsEarned}`;
+    }
 
     gameOverOverlay.classList.remove('hidden');
   }
@@ -765,14 +768,14 @@
     const gainedPoints = item.points * multiplier;
     score += gainedPoints;
 
-    // Coins: in Hard Mode, coin progress is DOUBLED (2x Coins!)
-    const coinGain = (gameMode === 'HARD') ? item.coins * 2 : item.coins;
-    coinProgress += coinGain;
+    // Coins: in Hard Mode, coin awards are DOUBLED (2x Coins!)
+    coinProgress += item.coins;
     if (coinProgress >= 10) {
-      const earnedCoins = Math.floor(coinProgress / 10);
+      const baseCoins = Math.floor(coinProgress / 10);
       coinProgress %= 10;
+      const earnedCoins = (gameMode === 'HARD') ? baseCoins * 2 : baseCoins;
       totalCoinsEarned += earnedCoins;
-      const coinText = gameMode === 'HARD' ? `+${earnedCoins} 🪙 (2x!)` : `+${earnedCoins} 🪙`;
+      const coinText = (gameMode === 'HARD') ? `+${earnedCoins} 🪙 (2x!)` : `+${earnedCoins} 🪙`;
       addFloatingText(basket.x + (Math.random() - 0.5) * 20, basket.y - 30, coinText, '#facc15', 1.3);
       playSound('golden');
     }
