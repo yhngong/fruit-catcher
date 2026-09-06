@@ -155,6 +155,7 @@
   let highScore = 0;
   let coins = 0;
   let totalCoinsEarned = 0;
+  let coinProgress = 0; // 10 progress points = 1 coin (10x harder)
   let fruitsCaught = 0;
   const GAME_DURATION = 60;
   let timeLeft = 60;
@@ -248,7 +249,6 @@
   // Mobile Touch Controls
   const btnTouchLeft = document.getElementById('btnTouchLeft');
   const btnTouchRight = document.getElementById('btnTouchRight');
-  const btnTouchDash = document.getElementById('btnTouchDash');
 
   // --- Storage & Initialization ---
   function loadPersistedData() {
@@ -313,6 +313,7 @@
     score = 0;
     fruitsCaught = 0;
     totalCoinsEarned = 0;
+    coinProgress = 0;
     timeLeft = GAME_DURATION;
     lastTickSec = 60;
     combo = 0;
@@ -415,7 +416,7 @@
     }
 
     // 1. Update Basket Movement (Snappy & Fast)
-    const speed = (basket.isDashing || keys.dash ? 1150 : 720) * dt;
+    const speed = (basket.isDashing || keys.dash ? 1150 : 820) * dt;
     if (keys.left) basket.targetX -= speed;
     if (keys.right) basket.targetX += speed;
 
@@ -612,7 +613,16 @@
 
     const gainedPoints = item.points * multiplier;
     score += gainedPoints;
-    totalCoinsEarned += item.coins;
+
+    // Coins are 10x harder to get (10 coin progress points = 1 real coin)
+    coinProgress += item.coins;
+    if (coinProgress >= 10) {
+      const earnedCoins = Math.floor(coinProgress / 10);
+      coinProgress %= 10;
+      totalCoinsEarned += earnedCoins;
+      addFloatingText(basket.x + (Math.random() - 0.5) * 20, basket.y - 30, `+${earnedCoins} 🪙`, '#facc15', 1.3);
+      playSound('golden');
+    }
 
     // Fill fever meter
     if (!feverActive) {
@@ -1040,7 +1050,7 @@
     btnTouchLeft.addEventListener('pointerdown', (e) => {
       e.preventDefault();
       keys.left = true;
-      basket.targetX -= 45; // Immediate impulse on tap
+      basket.targetX -= 55; // Immediate impulse on tap
     });
     btnTouchLeft.addEventListener('pointerup', () => { keys.left = false; });
     btnTouchLeft.addEventListener('pointerleave', () => { keys.left = false; });
@@ -1049,15 +1059,11 @@
     btnTouchRight.addEventListener('pointerdown', (e) => {
       e.preventDefault();
       keys.right = true;
-      basket.targetX += 45; // Immediate impulse on tap
+      basket.targetX += 55; // Immediate impulse on tap
     });
     btnTouchRight.addEventListener('pointerup', () => { keys.right = false; });
     btnTouchRight.addEventListener('pointerleave', () => { keys.right = false; });
     btnTouchRight.addEventListener('pointercancel', () => { keys.right = false; });
-
-    btnTouchDash.addEventListener('pointerdown', (e) => { e.preventDefault(); keys.dash = true; });
-    btnTouchDash.addEventListener('pointerup', () => { keys.dash = false; });
-    btnTouchDash.addEventListener('pointercancel', () => { keys.dash = false; });
 
     // Buttons
     btnStartGame.addEventListener('click', startGame);
