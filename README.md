@@ -12,6 +12,9 @@ A juicy, fast-paced arcade fruit-catching game built with pure HTML5 Canvas, mod
   - **Apples, Oranges, Bananas, Strawberries, Watermelons, Pineapples**: Give points and coins.
   - ⭐ **Golden Star Fruits**: Rare bonus items worth 100 points that boost the Fever meter!
   - 💣 **Bombs**: Avoid catching bombs! They inflict a -3s time penalty, cause screen shake, and reset your combo (no points lost).
+- 🔥 **Hard Mode (Double Bombs)**:
+  - Toggle between **Normal** and **Hard Mode** from the title screen or game-over screen.
+  - Hard Mode features **2x bomb spawn probability** (up to 26%), a 35% chance for simultaneous **tandem double bombs**, a glowing in-game HUD indicator, and dedicated high-score tracking!
 - ⚡ **Combo System**:
   - Catch fruits consecutively without dropping them to build multipliers up to **5x**!
 - 🔥 **Fever Time Mode**:

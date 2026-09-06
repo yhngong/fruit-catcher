@@ -188,8 +188,11 @@
 
   // --- State Variables ---
   let gameState = 'START'; // 'START' | 'PLAYING' | 'PAUSED' | 'GAMEOVER'
+  let gameMode = 'NORMAL'; // 'NORMAL' | 'HARD'
   let score = 0;
   let highScore = 0;
+  let highScoreNormal = 0;
+  let highScoreHard = 0;
   let coins = 0;
   let totalCoinsEarned = 0;
   let coinProgress = 0; // 10 progress points = 1 coin (10x harder)
@@ -247,6 +250,7 @@
   const feverLabel = document.getElementById('feverLabel');
   const timerPill = document.getElementById('timerPill');
   const timerVal = document.getElementById('timerVal');
+  const hardModeBadge = document.getElementById('hardModeBadge');
   const btnToggleSound = document.getElementById('btnToggleSound');
   const btnPause = document.getElementById('btnPause');
 
@@ -257,7 +261,7 @@
   const comboBadge = document.getElementById('comboBadge');
   const comboMultiplierText = document.getElementById('comboMultiplierText');
 
-  // Overlays
+  // Overlays & Mode Selectors
   const startOverlay = document.getElementById('startOverlay');
   const pauseOverlay = document.getElementById('pauseOverlay');
   const gameOverOverlay = document.getElementById('gameOverOverlay');
@@ -266,6 +270,11 @@
   const btnRestartFromPause = document.getElementById('btnRestartFromPause');
   const btnQuitToTitle = document.getElementById('btnQuitToTitle');
   const btnPlayAgain = document.getElementById('btnPlayAgain');
+
+  const btnModeNormal = document.getElementById('btnModeNormal');
+  const btnModeHard = document.getElementById('btnModeHard');
+  const btnOverModeNormal = document.getElementById('btnOverModeNormal');
+  const btnOverModeHard = document.getElementById('btnOverModeHard');
 
   // Stats in Game Over
   const finalScoreVal = document.getElementById('finalScoreVal');
@@ -295,7 +304,14 @@
   function loadPersistedData() {
     try {
       const savedHigh = localStorage.getItem('fruit_catcher_high');
-      if (savedHigh) highScore = parseInt(savedHigh, 10) || 0;
+      if (savedHigh) highScoreNormal = parseInt(savedHigh, 10) || 0;
+      highScore = highScoreNormal;
+
+      const savedHighHard = localStorage.getItem('fruit_catcher_high_hard');
+      if (savedHighHard) highScoreHard = parseInt(savedHighHard, 10) || 0;
+
+      const savedMode = localStorage.getItem('fruit_catcher_mode');
+      if (savedMode === 'HARD' || savedMode === 'NORMAL') gameMode = savedMode;
 
       const savedCoins = localStorage.getItem('fruit_catcher_coins');
       if (savedCoins) coins = parseInt(savedCoins, 10) || 0;
@@ -309,17 +325,65 @@
       }
     } catch (e) {}
 
-    highScoreVal.textContent = highScore;
     coinsVal.textContent = coins;
+    updateModeUI();
   }
 
   function savePersistedData() {
     try {
-      localStorage.setItem('fruit_catcher_high', highScore);
+      localStorage.setItem('fruit_catcher_high', highScoreNormal);
+      localStorage.setItem('fruit_catcher_high_hard', highScoreHard);
+      localStorage.setItem('fruit_catcher_mode', gameMode);
       localStorage.setItem('fruit_catcher_coins', coins);
       localStorage.setItem('fruit_catcher_skins', JSON.stringify(unlockedSkins));
       localStorage.setItem('fruit_catcher_active_skin', basket.skin);
     } catch (e) {}
+  }
+
+  function setGameMode(mode) {
+    if (gameMode === mode) return;
+    gameMode = mode;
+    savePersistedData();
+    updateModeUI();
+    playSound('powerup');
+  }
+
+  function updateModeUI() {
+    const isHard = gameMode === 'HARD';
+
+    if (btnModeNormal) {
+      btnModeNormal.classList.toggle('active', !isHard);
+    }
+    if (btnModeHard) {
+      btnModeHard.classList.toggle('active', isHard);
+      btnModeHard.classList.toggle('hard', isHard);
+    }
+    if (btnOverModeNormal) {
+      btnOverModeNormal.classList.toggle('active', !isHard);
+    }
+    if (btnOverModeHard) {
+      btnOverModeHard.classList.toggle('active', isHard);
+      btnOverModeHard.classList.toggle('hard', isHard);
+    }
+
+    if (btnStartGame) {
+      btnStartGame.classList.toggle('hard-mode-btn', isHard);
+      btnStartGame.textContent = isHard ? 'PLAY HARD MODE (2m 30s) 🔥' : 'PLAY NOW (2m 30s)';
+    }
+    if (btnPlayAgain) {
+      btnPlayAgain.classList.toggle('hard-mode-btn', isHard);
+      btnPlayAgain.textContent = isHard ? 'PLAY AGAIN (HARD) 🔥' : 'PLAY AGAIN';
+    }
+
+    const currentHigh = isHard ? highScoreHard : highScoreNormal;
+    if (highScoreVal) highScoreVal.textContent = currentHigh;
+    if (hardModeBadge) {
+      if (isHard && gameState === 'PLAYING') {
+        hardModeBadge.classList.remove('hidden');
+      } else {
+        hardModeBadge.classList.add('hidden');
+      }
+    }
   }
 
   function resizeCanvas() {
@@ -386,6 +450,10 @@
     timerPill.classList.remove('urgent');
     updateTimerHUD();
     updateHUD();
+    if (hardModeBadge) {
+      if (gameMode === 'HARD') hardModeBadge.classList.remove('hidden');
+      else hardModeBadge.classList.add('hidden');
+    }
     playSound('powerup');
   }
 
@@ -406,8 +474,24 @@
     gameState = 'GAMEOVER';
     playSound('timeup');
 
-    if (score > highScore) {
-      highScore = score;
+    let isNewRecord = false;
+    if (gameMode === 'HARD') {
+      if (score > highScoreHard) {
+        highScoreHard = score;
+        isNewRecord = true;
+      }
+      finalHighScoreVal.textContent = highScoreHard;
+    } else {
+      if (score > highScoreNormal) {
+        highScoreNormal = score;
+        highScore = score;
+        isNewRecord = true;
+      }
+      finalHighScoreVal.textContent = highScoreNormal;
+    }
+
+    if (isNewRecord) {
+      newHighBanner.textContent = gameMode === 'HARD' ? '🔥 NEW HARD MODE RECORD! 🔥' : '🎉 NEW HIGH SCORE! 🎉';
       newHighBanner.classList.remove('hidden');
     } else {
       newHighBanner.classList.add('hidden');
@@ -415,9 +499,9 @@
 
     coins += totalCoinsEarned;
     savePersistedData();
+    updateModeUI();
 
     finalScoreVal.textContent = score;
-    finalHighScoreVal.textContent = highScore;
     finalFruitsVal.textContent = fruitsCaught;
     finalCoinsVal.textContent = `🪙 +${totalCoinsEarned}`;
 
@@ -741,12 +825,21 @@
       type = roll < 0.65 ? 'golden' : (roll < 0.85 ? 'watermelon' : 'pineapple');
       itemsSinceLastBomb++;
     } else {
-      // Balanced gentle bomb scaling (starts at 8% base, gently scaling to max 13% over 2.5 minutes)
+      const isHard = gameMode === 'HARD';
       const timeElapsed = GAME_DURATION - timeLeft;
-      const bombChance = Math.min(0.13, 0.08 + (timeElapsed / GAME_DURATION) * 0.05);
 
-      // Require at least 2 non-bomb items between bombs to prevent unfair clusters
-      if (roll < bombChance && itemsSinceLastBomb >= 2) {
+      // In Hard Mode: DOUBLE BOMBS!
+      // Normal: 8% base scaling to max 13%
+      // Hard: 16% base scaling to max 26% (double frequency!)
+      const baseBombChance = isHard ? 0.16 : 0.08;
+      const maxBombChance = isHard ? 0.26 : 0.13;
+      const scaleRate = isHard ? 0.10 : 0.05;
+      const bombChance = Math.min(maxBombChance, baseBombChance + (timeElapsed / GAME_DURATION) * scaleRate);
+
+      // In Normal mode require at least 2 non-bomb items between bombs; in Hard mode require at least 1
+      const minSpacing = isHard ? 1 : 2;
+
+      if (roll < bombChance && itemsSinceLastBomb >= minSpacing) {
         type = 'bomb';
         itemsSinceLastBomb = 0;
       } else {
@@ -784,6 +877,30 @@
       coins: info.coins,
       isPowerup: !!info.isPowerup
     });
+
+    // In Hard Mode: 35% chance to drop a second bomb simultaneously (tandem double bombs!)
+    if (type === 'bomb' && gameMode === 'HARD' && Math.random() < 0.35) {
+      const bombInfo = FRUIT_TYPES['bomb'];
+      const x2 = (x > width / 2)
+        ? margin + Math.random() * (width * 0.4)
+        : (width * 0.55) + Math.random() * (width * 0.45 - margin);
+
+      fallingItems.push({
+        x: x2,
+        y: -bombInfo.radius - 15 - Math.random() * 15,
+        radius: bombInfo.radius,
+        vy: 160 + Math.random() * 80,
+        vx: (Math.random() - 0.5) * 30,
+        rotation: Math.random() * Math.PI * 2,
+        vRot: (Math.random() - 0.5) * 4,
+        type: 'bomb',
+        emoji: bombInfo.emoji,
+        color: bombInfo.color,
+        points: bombInfo.points,
+        coins: bombInfo.coins,
+        isPowerup: false
+      });
+    }
   }
 
   // --- Particle & Text FX ---
@@ -2916,6 +3033,12 @@
         mobileControls.addEventListener(evt, (e) => e.preventDefault(), { passive: false });
       }
     });
+
+    // Mode Selection Buttons
+    if (btnModeNormal) btnModeNormal.addEventListener('click', () => setGameMode('NORMAL'));
+    if (btnModeHard) btnModeHard.addEventListener('click', () => setGameMode('HARD'));
+    if (btnOverModeNormal) btnOverModeNormal.addEventListener('click', () => setGameMode('NORMAL'));
+    if (btnOverModeHard) btnOverModeHard.addEventListener('click', () => setGameMode('HARD'));
 
     // Buttons
     btnStartGame.addEventListener('click', startGame);
