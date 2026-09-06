@@ -503,7 +503,9 @@
 
     finalScoreVal.textContent = score;
     finalFruitsVal.textContent = fruitsCaught;
-    finalCoinsVal.textContent = `🪙 +${totalCoinsEarned}`;
+    finalCoinsVal.textContent = gameMode === 'HARD'
+      ? `🪙 +${totalCoinsEarned} (2x Hard Bonus!)`
+      : `🪙 +${totalCoinsEarned}`;
 
     gameOverOverlay.classList.remove('hidden');
   }
@@ -690,8 +692,8 @@
     fallingItems.splice(index, 1);
 
     if (item.type === 'bomb') {
-      if (feverActive) {
-        // Invulnerable in fever mode
+      if (feverActive && gameMode !== 'HARD') {
+        // Invulnerable in fever mode (Normal mode only!)
         addFloatingText(item.x, item.y, 'BLOCKED! ⭐', '#facc15');
         createJuiceParticles(item.x, item.y, '#f59e0b', 10);
         return;
@@ -715,7 +717,7 @@
       screenShake = 18;
       playSound('bomb');
       createJuiceParticles(item.x, item.y, '#334155', 25);
-      addFloatingText(item.x, item.y, 'BOMB! -3s 💣', '#ef4444');
+      addFloatingText(item.x, item.y, (feverActive && gameMode === 'HARD') ? 'FEVER HIT! -3s 💣' : 'BOMB! -3s 💣', '#ef4444');
 
       if (timeLeft <= 0) {
         triggerTimeUp();
@@ -763,13 +765,15 @@
     const gainedPoints = item.points * multiplier;
     score += gainedPoints;
 
-    // Coins are 10x harder to get (10 coin progress points = 1 real coin)
-    coinProgress += item.coins;
+    // Coins: in Hard Mode, coin progress is DOUBLED (2x Coins!)
+    const coinGain = (gameMode === 'HARD') ? item.coins * 2 : item.coins;
+    coinProgress += coinGain;
     if (coinProgress >= 10) {
       const earnedCoins = Math.floor(coinProgress / 10);
       coinProgress %= 10;
       totalCoinsEarned += earnedCoins;
-      addFloatingText(basket.x + (Math.random() - 0.5) * 20, basket.y - 30, `+${earnedCoins} 🪙`, '#facc15', 1.3);
+      const coinText = gameMode === 'HARD' ? `+${earnedCoins} 🪙 (2x!)` : `+${earnedCoins} 🪙`;
+      addFloatingText(basket.x + (Math.random() - 0.5) * 20, basket.y - 30, coinText, '#facc15', 1.3);
       playSound('golden');
     }
 
@@ -810,10 +814,16 @@
     feverTimer = 8;
     feverCooldownTimer = 0;
     if (feverMeterWrapper) feverMeterWrapper.classList.remove('cooldown');
-    feverLabel.textContent = '🌟 FEVER TIME 🌟';
-    feverMeterFill.style.background = 'linear-gradient(90deg, #facc15, #ec4899)';
+    const isHard = gameMode === 'HARD';
+    feverLabel.textContent = isHard ? '⚠️ HARD FEVER (DANGER!) ⚠️' : '🌟 FEVER TIME 🌟';
+    feverMeterFill.style.background = isHard
+      ? 'linear-gradient(90deg, #ef4444, #f59e0b)'
+      : 'linear-gradient(90deg, #facc15, #ec4899)';
     playSound('fever');
-    addFloatingText(basket.x, basket.y - 40, '🔥 FEVER TIME! 2X POINTS 🔥', '#fde047', 1.6);
+    const feverText = isHard
+      ? '🔥 FEVER TIME! 2X PTS (WATCH BOMBS!) 🔥'
+      : '🔥 FEVER TIME! 2X POINTS 🔥';
+    addFloatingText(basket.x, basket.y - 40, feverText, '#fde047', 1.6);
   }
 
   function spawnItem(width) {
@@ -821,9 +831,22 @@
     let type = 'apple';
 
     if (feverActive) {
-      // High chance of golden stars during fever
-      type = roll < 0.65 ? 'golden' : (roll < 0.85 ? 'watermelon' : 'pineapple');
-      itemsSinceLastBomb++;
+      if (gameMode === 'HARD') {
+        // In Hard Mode, bombs continue to drop during fever and fever does NOT protect!
+        const feverBombChance = 0.20;
+        if (roll < feverBombChance && itemsSinceLastBomb >= 1) {
+          type = 'bomb';
+          itemsSinceLastBomb = 0;
+        } else {
+          itemsSinceLastBomb++;
+          const subRoll = (roll - feverBombChance) / (1 - feverBombChance);
+          type = subRoll < 0.65 ? 'golden' : (subRoll < 0.85 ? 'watermelon' : 'pineapple');
+        }
+      } else {
+        // Normal Mode: Safe golden fruit rain
+        type = roll < 0.65 ? 'golden' : (roll < 0.85 ? 'watermelon' : 'pineapple');
+        itemsSinceLastBomb++;
+      }
     } else {
       const isHard = gameMode === 'HARD';
       const timeElapsed = GAME_DURATION - timeLeft;

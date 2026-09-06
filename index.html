@@ -13,7 +13,7 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/svg+xml" href="icon.svg">
   <link rel="apple-touch-icon" href="icon.svg">
-  <link rel="stylesheet" href="style.css?v=15">
+  <link rel="stylesheet" href="style.css?v=16">
 </head>
 <body>
   <div class="game-wrapper">
@@ -32,7 +32,7 @@
           <span class="coin-icon">🪙</span>
           <span id="coinsVal" class="hud-val">0</span>
         </div>
-        <div id="hardModeBadge" class="hud-pill hard-pill hidden">🔥 HARD</div>
+        <div id="hardModeBadge" class="hud-pill hard-pill hidden">🔥 HARD • 2x 🪙</div>
       </div>
 
       <div class="hud-center">
@@ -93,13 +93,13 @@
           <p class="game-tagline">⏱️ 2m 30s Blitz • Catch fruits • Build combos • Beat the clock!</p>
 
           <div class="title-actions">
-            <!-- Mode Selector: Normal vs Hard (Double Bombs) -->
+            <!-- Mode Selector: Normal vs Hard (Double Bombs & Double Coins) -->
             <div class="mode-selector-pill" id="startModeSelector">
               <button type="button" id="btnModeNormal" class="mode-btn active" data-mode="NORMAL">
                 🍎 Normal
               </button>
               <button type="button" id="btnModeHard" class="mode-btn" data-mode="HARD">
-                💣 Hard (2x Bombs)
+                💣 Hard (2x Bombs & 2x 🪙)
               </button>
             </div>
 
@@ -162,13 +162,13 @@
           </div>
 
           <div class="game-over-actions">
-            <!-- Mode Selector: Normal vs Hard (Double Bombs) -->
+            <!-- Mode Selector: Normal vs Hard (Double Bombs & Double Coins) -->
             <div class="mode-selector-pill" id="overModeSelector">
               <button type="button" id="btnOverModeNormal" class="mode-btn active" data-mode="NORMAL">
                 🍎 Normal
               </button>
               <button type="button" id="btnOverModeHard" class="mode-btn" data-mode="HARD">
-                💣 Hard (2x Bombs)
+                💣 Hard (2x Bombs & 2x 🪙)
               </button>
             </div>
             <button id="btnPlayAgain" class="btn-play pulse">PLAY AGAIN</button>
@@ -239,15 +239,15 @@
           <div class="rule-item">
             <span class="rule-icon">🔥</span>
             <div>
-              <strong>Hard Mode (Double Bombs!)</strong>
-              <p>Switch to Hard Mode for double bomb frequency and simultaneous double-bomb drops, with dedicated Hard Mode high scores!</p>
+              <strong>Hard Mode (Double Bombs & Double Coins!)</strong>
+              <p>Switch to Hard Mode for double bomb frequency, simultaneous double-bomb drops, and <strong>2X COINS</strong>! Warning: Fever mode does <em>NOT</em> protect you from bombs in Hard Mode!</p>
             </div>
           </div>
           <div class="rule-item">
             <span class="rule-icon">⚡</span>
             <div>
               <strong>Combos & Fever Mode</strong>
-              <p>Catch fruits in a row without missing to build multipliers up to 5x. Filling the fever meter unleashes a Golden Fruit Rain shower (with a 5s cooldown between fevers)!</p>
+              <p>Catch fruits in a row without missing to build multipliers up to 5x. Filling the fever meter unleashes an 8-second Golden Fruit Rain shower (in Normal mode, fever grants complete bomb invulnerability; in Hard mode, watch out for bombs!).</p>
             </div>
           </div>
           <div class="rule-item">
@@ -262,6 +262,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=15"></script>
+  <script src="app.js?v=16"></script>
 </body>
 </html>
