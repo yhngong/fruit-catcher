@@ -906,6 +906,98 @@ body {
   box-shadow: 0 2px 8px rgba(249, 115, 22, 0.4);
 }
 
+/* Abyssal Kraken */
+.skin-card.skin-kraken {
+  border: 1.5px solid rgba(6, 182, 212, 0.5);
+  box-shadow: 0 0 12px rgba(6, 182, 212, 0.2);
+}
+.skin-card.skin-kraken:hover {
+  border-color: #06b6d4;
+  box-shadow: 0 0 16px rgba(6, 182, 212, 0.45);
+}
+.skin-buy-btn.skin-buy-kraken {
+  background: linear-gradient(135deg, #0e7490, #06b6d4);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(6, 182, 212, 0.4);
+}
+
+/* Cyber Titan */
+.skin-card.skin-titan {
+  border: 1.5px solid rgba(56, 189, 248, 0.5);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
+}
+.skin-card.skin-titan:hover {
+  border-color: #38bdf8;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.45);
+}
+.skin-buy-btn.skin-buy-titan {
+  background: linear-gradient(135deg, #0284c7, #38bdf8);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(56, 189, 248, 0.4);
+}
+
+/* Frost Wyrm */
+.skin-card.skin-frost {
+  border: 1.5px solid rgba(165, 243, 252, 0.5);
+  box-shadow: 0 0 12px rgba(103, 232, 249, 0.25);
+}
+.skin-card.skin-frost:hover {
+  border-color: #67e8f9;
+  box-shadow: 0 0 16px rgba(103, 232, 249, 0.5);
+}
+.skin-buy-btn.skin-buy-frost {
+  background: linear-gradient(135deg, #0284c7, #67e8f9);
+  color: #0c4a6e;
+  font-weight: 900;
+  box-shadow: 0 2px 8px rgba(103, 232, 249, 0.4);
+}
+
+/* Solar Eclipse */
+.skin-card.skin-eclipse {
+  border: 1.5px solid rgba(245, 158, 11, 0.5);
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.25);
+}
+.skin-card.skin-eclipse:hover {
+  border-color: #f59e0b;
+  box-shadow: 0 0 18px rgba(245, 158, 11, 0.5);
+}
+.skin-buy-btn.skin-buy-eclipse {
+  background: linear-gradient(135deg, #b45309, #f59e0b);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
+}
+
+/* Quantum Singularity */
+.skin-card.skin-quantum {
+  border: 1.5px solid rgba(192, 38, 211, 0.5);
+  box-shadow: 0 0 14px rgba(192, 38, 211, 0.25);
+}
+.skin-card.skin-quantum:hover {
+  border-color: #c026d3;
+  box-shadow: 0 0 18px rgba(192, 38, 211, 0.5);
+}
+.skin-buy-btn.skin-buy-quantum {
+  background: linear-gradient(135deg, #9333ea, #c026d3);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(192, 38, 211, 0.4);
+}
+
+/* Seraphim Aegis */
+.skin-card.skin-seraphim {
+  border: 1.5px solid rgba(253, 224, 71, 0.6);
+  box-shadow: 0 0 15px rgba(253, 224, 71, 0.3);
+}
+.skin-card.skin-seraphim:hover {
+  border-color: #fde047;
+  box-shadow: 0 0 20px rgba(253, 224, 71, 0.55);
+}
+.skin-buy-btn.skin-buy-seraphim {
+  background: linear-gradient(135deg, #eab308, #fef08a);
+  color: #713f12;
+  font-weight: 900;
+  box-shadow: 0 2px 8px rgba(234, 179, 8, 0.4);
+}
+
 /* How to Play */
 .how-to-play-content {
   display: flex;

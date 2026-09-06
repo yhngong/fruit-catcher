@@ -504,6 +504,12 @@
     { id: 'diamond', name: 'Diamond Throne', icon: '👑', price: 1800, desc: 'Apex royal platinum & sapphire throne' },
     { id: 'blackhole', name: 'Black Hole', icon: '🕳️', price: 2000, desc: 'Singularity with glowing accretion disk' },
     { id: 'phoenix', name: 'Phoenix Flame', icon: '🔥', price: 2500, desc: 'Immortal firebird blazing with radiant embers' },
+    { id: 'kraken', name: 'Abyssal Kraken', icon: '🐙', price: 3500, desc: 'Deep-sea tentacled terror with bioluminescent suction cups' },
+    { id: 'titan', name: 'Cyber Titan', icon: '🦾', price: 4500, desc: 'Futuristic titanium exoskeleton with neon energy shields' },
+    { id: 'frost', name: 'Frost Wyrm', icon: '❄️', price: 5500, desc: 'Glacial ice dragon carved from ancient permafrost' },
+    { id: 'eclipse', name: 'Solar Eclipse', icon: '🌘', price: 6800, desc: 'Corona flare rim surrounding an obsidian shadow core' },
+    { id: 'quantum', name: 'Quantum Singularity', icon: '⚛️', price: 8000, desc: 'Subatomic particle accelerator warping space and time' },
+    { id: 'seraphim', name: 'Seraphim Aegis', icon: '🪽', price: 9200, desc: 'Holy divine reliquary with radiant golden angel wings' },
     { id: 'green', name: 'Green', icon: '🟢', price: 10000, desc: 'The legendary apex final skin radiant in emerald' }
   ];
 
@@ -3216,6 +3222,402 @@
       });
       ctx.shadowBlur = 0;
 
+    } else if (skin === 'kraken') {
+      // Abyssal Kraken (Deep-Sea Tentacled Terror)
+      ctx.shadowColor = '#06b6d4';
+      ctx.shadowBlur = 18;
+
+      // Deep Ocean Abyssal Hull
+      const krakenGrad = ctx.createLinearGradient(0, -h / 2, 0, h / 2);
+      krakenGrad.addColorStop(0, '#22d3ee');
+      krakenGrad.addColorStop(0.25, '#0e7490');
+      krakenGrad.addColorStop(0.7, '#083344');
+      krakenGrad.addColorStop(1, '#021822');
+      ctx.fillStyle = krakenGrad;
+      ctx.beginPath();
+      ctx.roundRect(-w / 2, -h / 2, w, h, [10, 10, 22, 22]);
+      ctx.fill();
+
+      // Glowing Cyan Rim & Waves
+      ctx.strokeStyle = '#67e8f9';
+      ctx.lineWidth = 2.2;
+      ctx.stroke();
+
+      // Curling Kraken Tentacles on Edges
+      [-1, 1].forEach((dir) => {
+        ctx.strokeStyle = '#22d3ee';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(dir * (w * 0.46), h * 0.1);
+        ctx.bezierCurveTo(dir * (w * 0.58), -h * 0.25, dir * (w * 0.44), -h * 0.58, dir * (w * 0.32), -h * 0.42);
+        ctx.stroke();
+
+        // Tentacle suckers
+        ctx.fillStyle = '#a5f3fc';
+        [[-h * 0.15, 2], [-h * 0.35, 1.8], [-h * 0.46, 1.4]].forEach(([sy, r]) => {
+          ctx.beginPath();
+          ctx.arc(dir * (w * 0.48), sy, r, 0, Math.PI * 2);
+          ctx.fill();
+        });
+      });
+
+      // Bioluminescent Hull Suction Dots
+      [-w * 0.32, -w * 0.16, w * 0.16, w * 0.32].forEach((sx, idx) => {
+        ctx.fillStyle = '#67e8f9';
+        ctx.beginPath();
+        ctx.arc(sx, h * 0.15 + (idx % 2) * 3, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#083344';
+        ctx.beginPath();
+        ctx.arc(sx, h * 0.15 + (idx % 2) * 3, 1.2, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      // Central Golden Kraken Eye
+      ctx.shadowColor = '#facc15';
+      ctx.shadowBlur = 12;
+      const eyeGrad = ctx.createRadialGradient(0, -2, 1, 0, -2, 8);
+      eyeGrad.addColorStop(0, '#fef08a');
+      eyeGrad.addColorStop(0.6, '#eab308');
+      eyeGrad.addColorStop(1, '#854d0e');
+      ctx.fillStyle = eyeGrad;
+      ctx.beginPath();
+      ctx.ellipse(0, -2, 8, 5, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#0f172a';
+      ctx.beginPath();
+      ctx.ellipse(0, -2, 1.5, 4.5, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+    } else if (skin === 'titan') {
+      // Cyber Titan (Futuristic Mecha Exoskeleton)
+      ctx.shadowColor = '#38bdf8';
+      ctx.shadowBlur = 18;
+
+      // Gunmetal & Carbon Composite Hull
+      const titanGrad = ctx.createLinearGradient(0, -h / 2, 0, h / 2);
+      titanGrad.addColorStop(0, '#64748b');
+      titanGrad.addColorStop(0.2, '#334155');
+      titanGrad.addColorStop(0.7, '#1e293b');
+      titanGrad.addColorStop(1, '#0f172a');
+      ctx.fillStyle = titanGrad;
+      ctx.beginPath();
+      ctx.roundRect(-w / 2, -h / 2, w, h, [6, 6, 16, 16]);
+      ctx.fill();
+
+      // Chamfered Armor Plates & Neon Seams
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Angular Corner Stabilizer Wings
+      [-1, 1].forEach((dir) => {
+        ctx.fillStyle = '#475569';
+        ctx.beginPath();
+        ctx.moveTo(dir * (w * 0.44), -h * 0.35);
+        ctx.lineTo(dir * (w * 0.58), -h * 0.1);
+        ctx.lineTo(dir * (w * 0.44), h * 0.25);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+      });
+
+      // Horizontal Energy Rail
+      const railGrad = ctx.createLinearGradient(-w * 0.35, 0, w * 0.35, 0);
+      railGrad.addColorStop(0, 'rgba(56, 189, 248, 0.2)');
+      railGrad.addColorStop(0.5, '#38bdf8');
+      railGrad.addColorStop(1, 'rgba(56, 189, 248, 0.2)');
+      ctx.strokeStyle = railGrad;
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(-w * 0.38, -h * 0.28);
+      ctx.lineTo(w * 0.38, -h * 0.28);
+      ctx.stroke();
+
+      // Glowing Hexagonal Arc Reactor Core
+      ctx.shadowColor = '#7dd3fc';
+      ctx.shadowBlur = 14;
+      const coreGrad = ctx.createRadialGradient(0, 2, 1, 0, 2, 9);
+      coreGrad.addColorStop(0, '#ffffff');
+      coreGrad.addColorStop(0.35, '#38bdf8');
+      coreGrad.addColorStop(0.8, '#0284c7');
+      coreGrad.addColorStop(1, '#0c4a6e');
+      ctx.fillStyle = coreGrad;
+      ctx.beginPath();
+      for (let i = 0; i < 6; i++) {
+        const ang = (i * Math.PI) / 3;
+        const hx = Math.cos(ang) * 9;
+        const hy = Math.sin(ang) * 9 + 2;
+        if (i === 0) ctx.moveTo(hx, hy);
+        else ctx.lineTo(hx, hy);
+      }
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = '#e0f2fe';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+    } else if (skin === 'frost') {
+      // Frost Wyrm (Glacial Ice Dragon)
+      ctx.shadowColor = '#67e8f9';
+      ctx.shadowBlur = 18;
+
+      // Crystalline Glacial Hull
+      const iceGrad = ctx.createLinearGradient(0, -h / 2, 0, h / 2);
+      iceGrad.addColorStop(0, '#f0f9ff');
+      iceGrad.addColorStop(0.25, '#7dd3fc');
+      iceGrad.addColorStop(0.7, '#0284c7');
+      iceGrad.addColorStop(1, '#082f49');
+      ctx.fillStyle = iceGrad;
+      ctx.beginPath();
+      ctx.roundRect(-w / 2, -h / 2, w, h, [8, 8, 18, 18]);
+      ctx.fill();
+
+      // Spiked Ice Crystal Horns on Left and Right
+      [-1, 1].forEach((dir) => {
+        ctx.fillStyle = '#e0f2fe';
+        ctx.beginPath();
+        ctx.moveTo(dir * (w * 0.36), -h * 0.45);
+        ctx.lineTo(dir * (w * 0.52), -h * 0.72);
+        ctx.lineTo(dir * (w * 0.46), -h * 0.2);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+      });
+
+      // Frosted Rims & Facet Lines
+      ctx.strokeStyle = '#e0f2fe';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Faceted Geometric Crystal Cuts
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+      ctx.lineWidth = 1.2;
+      [-1, 1].forEach((dir) => {
+        ctx.beginPath();
+        ctx.moveTo(0, -h * 0.4);
+        ctx.lineTo(dir * (w * 0.28), 0);
+        ctx.lineTo(0, h * 0.4);
+        ctx.stroke();
+      });
+
+      // Center Sparkling Ice Snowflake Core
+      ctx.shadowColor = '#ffffff';
+      ctx.shadowBlur = 12;
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 2;
+      for (let i = 0; i < 3; i++) {
+        const ang = (i * Math.PI) / 3;
+        ctx.beginPath();
+        ctx.moveTo(-Math.cos(ang) * 8, 2 - Math.sin(ang) * 8);
+        ctx.lineTo(Math.cos(ang) * 8, 2 + Math.sin(ang) * 8);
+        ctx.stroke();
+      }
+      ctx.fillStyle = '#bae6fd';
+      ctx.beginPath();
+      ctx.arc(0, 2, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+    } else if (skin === 'eclipse') {
+      // Solar Eclipse (Corona Flare & Obsidian Void)
+      ctx.shadowColor = '#f59e0b';
+      ctx.shadowBlur = 22;
+
+      // Obsidian Void Core Hull
+      const voidGrad = ctx.createLinearGradient(0, -h / 2, 0, h / 2);
+      voidGrad.addColorStop(0, '#18181b');
+      voidGrad.addColorStop(0.3, '#09090b');
+      voidGrad.addColorStop(0.8, '#030712');
+      voidGrad.addColorStop(1, '#000000');
+      ctx.fillStyle = voidGrad;
+      ctx.beginPath();
+      ctx.roundRect(-w / 2, -h / 2, w, h, [10, 10, 20, 20]);
+      ctx.fill();
+
+      // Blazing Solar Corona Prominence Flames along Rim
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+
+      // Solar Corona Rays bursting outward
+      [-w * 0.44, -w * 0.22, 0, w * 0.22, w * 0.44].forEach((rx, idx) => {
+        ctx.strokeStyle = idx % 2 === 0 ? '#fef08a' : '#f97316';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(rx, -h * 0.42);
+        ctx.lineTo(rx + (rx > 0 ? 3 : -3), -h * 0.68);
+        ctx.stroke();
+      });
+
+      // Side Corona Wing Flames
+      [-1, 1].forEach((dir) => {
+        ctx.fillStyle = '#d97706';
+        ctx.beginPath();
+        ctx.moveTo(dir * (w * 0.42), -h * 0.3);
+        ctx.quadraticCurveTo(dir * (w * 0.58), -h * 0.1, dir * (w * 0.52), h * 0.2);
+        ctx.lineTo(dir * (w * 0.42), h * 0.1);
+        ctx.closePath();
+        ctx.fill();
+      });
+
+      // Central Eclipse Ring (Black Moon with Golden Corona)
+      ctx.shadowColor = '#fbbf24';
+      ctx.shadowBlur = 16;
+      ctx.strokeStyle = '#fef08a';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.arc(0, 0, 9, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.fillStyle = '#09090b';
+      ctx.beginPath();
+      ctx.arc(0, 0, 7.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = 'rgba(251, 191, 36, 0.4)';
+      ctx.beginPath();
+      ctx.arc(-2, -2, 3, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+    } else if (skin === 'quantum') {
+      // Quantum Singularity (Cosmic Particle Warp)
+      ctx.shadowColor = '#c026d3';
+      ctx.shadowBlur = 20;
+
+      // Ultraviolet Quantum Flux Hull
+      const qGrad = ctx.createLinearGradient(0, -h / 2, 0, h / 2);
+      qGrad.addColorStop(0, '#f472b6');
+      qGrad.addColorStop(0.25, '#c026d3');
+      qGrad.addColorStop(0.65, '#6b21a8');
+      qGrad.addColorStop(1, '#2e1065');
+      ctx.fillStyle = qGrad;
+      ctx.beginPath();
+      ctx.roundRect(-w / 2, -h / 2, w, h, [8, 8, 20, 20]);
+      ctx.fill();
+
+      // Neon Magenta Wave Borders
+      ctx.strokeStyle = '#e879f9';
+      ctx.lineWidth = 2.2;
+      ctx.stroke();
+
+      // Quantum Wave Interlacing Lines
+      ctx.strokeStyle = 'rgba(244, 114, 182, 0.5)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(-w * 0.4, 0);
+      ctx.bezierCurveTo(-w * 0.15, -h * 0.35, w * 0.15, h * 0.35, w * 0.4, 0);
+      ctx.stroke();
+
+      // Angled Electron Orbital Rings
+      ctx.strokeStyle = 'rgba(192, 38, 211, 0.8)';
+      ctx.lineWidth = 1.8;
+      [-0.45, 0.45].forEach((rot) => {
+        ctx.save();
+        ctx.rotate(rot);
+        ctx.beginPath();
+        ctx.ellipse(0, 0, 15, 6, 0, 0, Math.PI * 2);
+        ctx.stroke();
+        // Orbital Electron
+        ctx.fillStyle = '#38bdf8';
+        ctx.beginPath();
+        ctx.arc(15, 0, 2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      });
+
+      // Quantum Core Nucleus
+      ctx.shadowColor = '#f472b6';
+      ctx.shadowBlur = 14;
+      const nucGrad = ctx.createRadialGradient(0, 0, 1, 0, 0, 6);
+      nucGrad.addColorStop(0, '#ffffff');
+      nucGrad.addColorStop(0.4, '#e879f9');
+      nucGrad.addColorStop(1, '#9333ea');
+      ctx.fillStyle = nucGrad;
+      ctx.beginPath();
+      ctx.arc(0, 0, 5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+    } else if (skin === 'seraphim') {
+      // Seraphim Aegis (Holy Divine Reliquary)
+      ctx.shadowColor = '#fde047';
+      ctx.shadowBlur = 22;
+
+      // Pearlescent Alabaster Hull
+      const angelGrad = ctx.createLinearGradient(0, -h / 2, 0, h / 2);
+      angelGrad.addColorStop(0, '#ffffff');
+      angelGrad.addColorStop(0.3, '#fef9c3');
+      angelGrad.addColorStop(0.7, '#fef08a');
+      angelGrad.addColorStop(1, '#ca8a04');
+      ctx.fillStyle = angelGrad;
+      ctx.beginPath();
+      ctx.roundRect(-w / 2, -h / 2, w, h, [10, 10, 22, 22]);
+      ctx.fill();
+
+      // Ornate 24k Gold Filigree Rim
+      ctx.strokeStyle = '#eab308';
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+
+      // Grand Seraphim Feather Wings on Sides
+      [-1, 1].forEach((dir) => {
+        ctx.fillStyle = '#fef08a';
+        ctx.strokeStyle = '#ca8a04';
+        ctx.lineWidth = 1.4;
+
+        // Top Wing Feather
+        ctx.beginPath();
+        ctx.moveTo(dir * (w * 0.42), -h * 0.2);
+        ctx.quadraticCurveTo(dir * (w * 0.62), -h * 0.65, dir * (w * 0.38), -h * 0.55);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Lower Wing Feather
+        ctx.beginPath();
+        ctx.moveTo(dir * (w * 0.44), 0);
+        ctx.quadraticCurveTo(dir * (w * 0.64), -h * 0.25, dir * (w * 0.42), -h * 0.35);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+      });
+
+      // Floating Holy Golden Halo
+      ctx.shadowColor = '#fef08a';
+      ctx.shadowBlur = 10;
+      ctx.strokeStyle = '#facc15';
+      ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      ctx.ellipse(0, -h * 0.48, w * 0.25, 4.5, 0, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Central Holy Sapphire Gem
+      ctx.shadowColor = '#38bdf8';
+      ctx.shadowBlur = 12;
+      const gemGrad = ctx.createRadialGradient(0, 1, 1, 0, 1, 8);
+      gemGrad.addColorStop(0, '#f0fdf4');
+      gemGrad.addColorStop(0.4, '#38bdf8');
+      gemGrad.addColorStop(0.8, '#1d4ed8');
+      gemGrad.addColorStop(1, '#172554');
+      ctx.fillStyle = gemGrad;
+      ctx.beginPath();
+      ctx.moveTo(0, -7);
+      ctx.lineTo(8, 1);
+      ctx.lineTo(0, 9);
+      ctx.lineTo(-8, 1);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = '#fef08a';
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
     } else if (skin === 'green') {
       // Green (The Legendary 10,000 Points Apex Skin)
       ctx.shadowColor = '#22c55e';
@@ -3352,12 +3754,14 @@
       const isOwned = unlockedSkins.includes(skin.id);
       const isActive = basket.skin === skin.id;
 
-      const card = document.createElement('div');
-      card.className = `skin-card ${isActive ? 'active' : ''} ${skin.id === 'green' ? 'skin-green' : ''} ${skin.id === 'phoenix' ? 'skin-phoenix' : ''}`;
+      const specialSkinIds = ['green', 'phoenix', 'kraken', 'titan', 'frost', 'eclipse', 'quantum', 'seraphim'];
+      const specialSkinClass = specialSkinIds.includes(skin.id) ? `skin-${skin.id}` : '';
+      card.className = `skin-card ${isActive ? 'active' : ''} ${specialSkinClass}`.trim();
 
       let buyBtnClass = 'skin-buy-btn';
-      if (skin.id === 'green') buyBtnClass = 'skin-buy-btn skin-buy-green';
-      else if (skin.id === 'phoenix') buyBtnClass = 'skin-buy-btn skin-buy-phoenix';
+      if (specialSkinIds.includes(skin.id)) {
+        buyBtnClass = `skin-buy-btn skin-buy-${skin.id}`;
+      }
       const buyBtnHtml = `<button class="${buyBtnClass}" data-id="${skin.id}">🪙 ${skin.price.toLocaleString()}</button>`;
 
       card.innerHTML = `

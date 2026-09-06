@@ -32,6 +32,12 @@ A juicy, fast-paced arcade fruit-catching game built with pure HTML5 Canvas, mod
     - 🍉 **Melon Bowl**
     - 🐼 **Panda Pouch**
     - 🔥 **Phoenix Flame (Mythical Firebird with Blazing Embers)**
+    - 🐙 **Abyssal Kraken (Deep-sea terror with bioluminescent suction cups)**
+    - 🦾 **Cyber Titan (Futuristic titanium mecha with neon shields)**
+    - ❄️ **Frost Wyrm (Glacial ice dragon carved from ancient permafrost)**
+    - 🌘 **Solar Eclipse (Corona flare rim surrounding an obsidian core)**
+    - ⚛️ **Quantum Singularity (Subatomic particle accelerator warping spacetime)**
+    - 🪽 **Seraphim Aegis (Holy divine reliquary with radiant golden wings)**
     - 🟢 **Green (The Legendary 10,000 Coins Apex Skin)**
 - 🎵 **Dynamic Procedural Background Music**:
   - Full chiptune retro soundtrack synthesized in real-time via the Web Audio API (zero MP3/WAV audio files downloaded).
