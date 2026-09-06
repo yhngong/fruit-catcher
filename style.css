@@ -173,7 +173,7 @@ body {
 .timer-pill {
   background: rgba(15, 23, 42, 0.85);
   border: 1px solid rgba(56, 189, 248, 0.5);
-  min-width: 68px;
+  min-width: 76px;
   justify-content: center;
 }
 

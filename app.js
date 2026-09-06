@@ -194,9 +194,9 @@
   let totalCoinsEarned = 0;
   let coinProgress = 0; // 10 progress points = 1 coin (10x harder)
   let fruitsCaught = 0;
-  const GAME_DURATION = 60;
-  let timeLeft = 60;
-  let lastTickSec = 60;
+  const GAME_DURATION = 150; // 2 minutes 30 seconds
+  let timeLeft = 150;
+  let lastTickSec = 150;
   let combo = 0;
   let maxCombo = 0;
   let feverMeter = 0;
@@ -355,7 +355,7 @@
     totalCoinsEarned = 0;
     coinProgress = 0;
     timeLeft = GAME_DURATION;
-    lastTickSec = 60;
+    lastTickSec = GAME_DURATION;
     combo = 0;
     maxCombo = 0;
     feverMeter = 0;
@@ -2763,9 +2763,11 @@
   }
 
   function updateTimerHUD() {
-    const displaySec = Math.ceil(timeLeft);
-    timerVal.textContent = displaySec;
-    if (displaySec <= 10) {
+    const totalSec = Math.max(0, Math.ceil(timeLeft));
+    const m = Math.floor(totalSec / 60);
+    const s = totalSec % 60;
+    timerVal.textContent = `${m}:${s < 10 ? '0' : ''}${s}`;
+    if (totalSec <= 10) {
       timerPill.classList.add('urgent');
     } else {
       timerPill.classList.remove('urgent');
