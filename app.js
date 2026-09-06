@@ -454,7 +454,7 @@
 
     // 3. Spawning Falling Items
     spawnCooldown -= dt;
-    const baseSpawnRate = feverActive ? 0.18 : Math.max(0.35, 0.9 - (score / 3000) * 0.4);
+    const baseSpawnRate = feverActive ? 0.18 : Math.max(0.28, 0.75 - (score / 2500) * 0.45);
     if (spawnCooldown <= 0) {
       spawnItem(width);
       spawnCooldown = baseSpawnRate * (slowTimer > 0 ? 1.5 : 1);
@@ -671,18 +671,25 @@
       // High chance of golden stars during fever
       type = roll < 0.65 ? 'golden' : (roll < 0.85 ? 'watermelon' : 'pineapple');
     } else {
-      // Normal spawn probabilities
-      if (roll < 0.12) type = 'bomb';
-      else if (roll < 0.15) type = 'power_magnet';
-      else if (roll < 0.18) type = 'power_slow';
-      else if (roll < 0.20) type = 'power_shield';
-      else if (roll < 0.25) type = 'golden';
-      else if (roll < 0.40) type = 'apple';
-      else if (roll < 0.55) type = 'orange';
-      else if (roll < 0.70) type = 'banana';
-      else if (roll < 0.85) type = 'strawberry';
-      else if (roll < 0.94) type = 'watermelon';
-      else type = 'pineapple';
+      // Significantly increased bomb frequency (~25% base, scaling up to 33% as time winds down)
+      const timeElapsed = GAME_DURATION - timeLeft;
+      const bombChance = Math.min(0.33, 0.25 + (timeElapsed / GAME_DURATION) * 0.08);
+
+      if (roll < bombChance) {
+        type = 'bomb';
+      } else {
+        const subRoll = (roll - bombChance) / (1 - bombChance);
+        if (subRoll < 0.04) type = 'power_magnet';
+        else if (subRoll < 0.09) type = 'power_slow';
+        else if (subRoll < 0.13) type = 'power_shield';
+        else if (subRoll < 0.20) type = 'golden';
+        else if (subRoll < 0.38) type = 'apple';
+        else if (subRoll < 0.54) type = 'orange';
+        else if (subRoll < 0.70) type = 'banana';
+        else if (subRoll < 0.84) type = 'strawberry';
+        else if (subRoll < 0.93) type = 'watermelon';
+        else type = 'pineapple';
+      }
     }
 
     const info = FRUIT_TYPES[type];
