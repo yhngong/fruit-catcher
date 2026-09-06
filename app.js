@@ -365,16 +365,16 @@
     const width = rect.width;
     const height = rect.height;
 
-    // 1. Update Basket Movement
-    const speed = (basket.isDashing || keys.dash ? 550 : 360) * dt;
+    // 1. Update Basket Movement (Snappy & Fast)
+    const speed = (basket.isDashing || keys.dash ? 1150 : 720) * dt;
     if (keys.left) basket.targetX -= speed;
     if (keys.right) basket.targetX += speed;
 
     basket.targetX = Math.max(basket.width / 2, Math.min(width - basket.width / 2, basket.targetX));
 
-    // Smooth lerp
+    // Smooth & responsive lerp
     const prevX = basket.x;
-    basket.x += (basket.targetX - basket.x) * Math.min(1, dt * 18);
+    basket.x += (basket.targetX - basket.x) * Math.min(1, dt * 30);
     basket.vx = basket.x - prevX;
     basket.tilt = Math.max(-0.25, Math.min(0.25, basket.vx * 0.03));
 
@@ -979,17 +979,28 @@
       basket.targetX = e.clientX - rect.left;
     });
 
-    // Touch controls on screen
-    btnTouchLeft.addEventListener('pointerdown', (e) => { e.preventDefault(); keys.left = true; });
+    // Touch controls on screen (Fast & Responsive)
+    btnTouchLeft.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      keys.left = true;
+      basket.targetX -= 45; // Immediate impulse on tap
+    });
     btnTouchLeft.addEventListener('pointerup', () => { keys.left = false; });
     btnTouchLeft.addEventListener('pointerleave', () => { keys.left = false; });
+    btnTouchLeft.addEventListener('pointercancel', () => { keys.left = false; });
 
-    btnTouchRight.addEventListener('pointerdown', (e) => { e.preventDefault(); keys.right = true; });
+    btnTouchRight.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      keys.right = true;
+      basket.targetX += 45; // Immediate impulse on tap
+    });
     btnTouchRight.addEventListener('pointerup', () => { keys.right = false; });
     btnTouchRight.addEventListener('pointerleave', () => { keys.right = false; });
+    btnTouchRight.addEventListener('pointercancel', () => { keys.right = false; });
 
     btnTouchDash.addEventListener('pointerdown', (e) => { e.preventDefault(); keys.dash = true; });
     btnTouchDash.addEventListener('pointerup', () => { keys.dash = false; });
+    btnTouchDash.addEventListener('pointercancel', () => { keys.dash = false; });
 
     // Buttons
     btnStartGame.addEventListener('click', startGame);
