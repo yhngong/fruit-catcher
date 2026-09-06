@@ -286,6 +286,7 @@
   // Mobile Touch Controls
   const btnTouchLeft = document.getElementById('btnTouchLeft');
   const btnTouchRight = document.getElementById('btnTouchRight');
+  const mobileControls = document.getElementById('mobileControls');
 
   // --- Storage & Initialization ---
   function loadPersistedData() {
@@ -2707,24 +2708,45 @@
       basket.targetX = e.clientX - rect.left;
     });
 
-    // Touch controls on screen (Fast & Responsive)
-    btnTouchLeft.addEventListener('pointerdown', (e) => {
+    // Touch controls on screen (Fast, Responsive & No Text Copy Glitch)
+    const handleLeftStart = (e) => {
       e.preventDefault();
       keys.left = true;
       basket.targetX -= 55; // Immediate impulse on tap
-    });
-    btnTouchLeft.addEventListener('pointerup', () => { keys.left = false; });
-    btnTouchLeft.addEventListener('pointerleave', () => { keys.left = false; });
-    btnTouchLeft.addEventListener('pointercancel', () => { keys.left = false; });
+    };
+    const handleLeftEnd = (e) => {
+      if (e && e.cancelable) e.preventDefault();
+      keys.left = false;
+    };
 
-    btnTouchRight.addEventListener('pointerdown', (e) => {
+    const handleRightStart = (e) => {
       e.preventDefault();
       keys.right = true;
       basket.targetX += 55; // Immediate impulse on tap
+    };
+    const handleRightEnd = (e) => {
+      if (e && e.cancelable) e.preventDefault();
+      keys.right = false;
+    };
+
+    btnTouchLeft.addEventListener('pointerdown', handleLeftStart);
+    btnTouchLeft.addEventListener('pointerup', handleLeftEnd);
+    btnTouchLeft.addEventListener('pointerleave', handleLeftEnd);
+    btnTouchLeft.addEventListener('pointercancel', handleLeftEnd);
+
+    btnTouchRight.addEventListener('pointerdown', handleRightStart);
+    btnTouchRight.addEventListener('pointerup', handleRightEnd);
+    btnTouchRight.addEventListener('pointerleave', handleRightEnd);
+    btnTouchRight.addEventListener('pointercancel', handleRightEnd);
+
+    // Prevent context menu, callout popups, and text selection on mobile buttons
+    ['contextmenu', 'selectstart', 'dragstart'].forEach((evt) => {
+      btnTouchLeft.addEventListener(evt, (e) => e.preventDefault(), { passive: false });
+      btnTouchRight.addEventListener(evt, (e) => e.preventDefault(), { passive: false });
+      if (mobileControls) {
+        mobileControls.addEventListener(evt, (e) => e.preventDefault(), { passive: false });
+      }
     });
-    btnTouchRight.addEventListener('pointerup', () => { keys.right = false; });
-    btnTouchRight.addEventListener('pointerleave', () => { keys.right = false; });
-    btnTouchRight.addEventListener('pointercancel', () => { keys.right = false; });
 
     // Buttons
     btnStartGame.addEventListener('click', startGame);
