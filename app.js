@@ -142,11 +142,19 @@
   };
 
   const BASKET_SKINS = [
-    { id: 'classic', name: 'Wicker Basket', icon: '🧺', price: 0 },
-    { id: 'golden', name: 'Royal Gold Urn', icon: '🪙', price: 150 },
-    { id: 'cyber', name: 'Cyber Hopper', icon: '🤖', price: 350 },
-    { id: 'watermelon', name: 'Melon Bowl', icon: '🍉', price: 600 },
-    { id: 'panda', name: 'Panda Pouch', icon: '🐼', price: 1000 }
+    { id: 'classic', name: 'Wicker Basket', icon: '🧺', price: 0, desc: 'Classic handwoven picnic basket' },
+    { id: 'frog', name: 'Lil Froggy', icon: '🐸', price: 60, desc: 'Hoppy & happy pond pal' },
+    { id: 'cat', name: 'Neko Catcher', icon: '🐱', price: 100, desc: 'Lucky calico kitty bowl with ears' },
+    { id: 'golden', name: 'Royal Gold Urn', icon: '🪙', price: 150, desc: 'Forged in solid 24k gold with ruby' },
+    { id: 'pirate', name: 'Treasure Chest', icon: '🏴‍☠️', price: 250, desc: 'Heavy oak chest with brass fittings' },
+    { id: 'cyber', name: 'Cyber Hopper', icon: '🤖', price: 320, desc: 'Neon-infused mecha collector' },
+    { id: 'rainbow', name: 'Rainbow Cloud', icon: '🌈', price: 400, desc: 'Fluffy cloud with rainbow stripes' },
+    { id: 'watermelon', name: 'Melon Bowl', icon: '🍉', price: 550, desc: 'Crisp, sweet giant watermelon' },
+    { id: 'ufo', name: 'Alien Saucer', icon: '🛸', price: 700, desc: 'Saucer with tractor beam & alien' },
+    { id: 'galaxy', name: 'Cosmic Nebula', icon: '🌌', price: 850, desc: 'Midnight nebula with stardust & ring' },
+    { id: 'panda', name: 'Panda Pouch', icon: '🐼', price: 1000, desc: 'Adorable panda face with ears' },
+    { id: 'lava', name: 'Magma Cauldron', icon: '🌋', price: 1200, desc: 'Cracked basalt with bubbling lava' },
+    { id: 'dragon', name: 'Dragon Hoard', icon: '🐉', price: 1500, desc: 'Crimson beast with golden horns' }
   ];
 
   // --- State Variables ---
@@ -909,46 +917,500 @@
       ctx.strokeStyle = '#854d0e';
       ctx.lineWidth = 2;
       ctx.stroke();
+
+      // Handles on left and right
+      ctx.fillStyle = '#eab308';
+      ctx.beginPath();
+      ctx.arc(-w * 0.5 - 2, 0, 7, Math.PI * 0.5, Math.PI * 1.5);
+      ctx.arc(w * 0.5 + 2, 0, 7, -Math.PI * 0.5, Math.PI * 0.5);
+      ctx.stroke();
+
+      // Royal red ruby gem in center
+      ctx.fillStyle = '#ef4444';
+      ctx.beginPath();
+      ctx.arc(0, 0, 5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+    } else if (skin === 'frog') {
+      // Lil Froggy
+      const frogGrad = ctx.createLinearGradient(0, -h / 2, 0, h / 2);
+      frogGrad.addColorStop(0, '#4ade80');
+      frogGrad.addColorStop(1, '#16a34a');
+      ctx.fillStyle = frogGrad;
+      ctx.beginPath();
+      ctx.roundRect(-w / 2, -h / 2, w, h, [12, 12, 18, 18]);
+      ctx.fill();
+      ctx.strokeStyle = '#15803d';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Lighter belly
+      ctx.fillStyle = '#bbf7d0';
+      ctx.beginPath();
+      ctx.ellipse(0, 4, w * 0.28, h * 0.32, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Frog Eyes popping above rim
+      [-w * 0.28, w * 0.28].forEach((eyeX) => {
+        ctx.fillStyle = '#22c55e';
+        ctx.beginPath();
+        ctx.arc(eyeX, -h / 2, 9, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#15803d';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(eyeX, -h / 2, 6, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#0f172a';
+        ctx.beginPath();
+        ctx.arc(eyeX, -h / 2, 3, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(eyeX - 1, -h / 2 - 1, 1.2, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      // Rosy blush cheeks
+      ctx.fillStyle = 'rgba(244, 114, 182, 0.55)';
+      ctx.beginPath();
+      ctx.arc(-w * 0.36, 2, 5, 0, Math.PI * 2);
+      ctx.arc(w * 0.36, 2, 5, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Smile
+      ctx.strokeStyle = '#15803d';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(0, 2, 8, 0.2, Math.PI - 0.2);
+      ctx.stroke();
+
+    } else if (skin === 'cat') {
+      // Neko Catcher
+      ctx.fillStyle = '#fffdfa';
+      ctx.beginPath();
+      ctx.roundRect(-w / 2, -h / 2, w, h, [14, 14, 18, 18]);
+      ctx.fill();
+      ctx.strokeStyle = '#e2e8f0';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Left pointy cat ear (ginger patch)
+      ctx.fillStyle = '#f97316';
+      ctx.beginPath();
+      ctx.moveTo(-w * 0.42, -h / 2);
+      ctx.lineTo(-w * 0.32, -h / 2 - 14);
+      ctx.lineTo(-w * 0.20, -h / 2);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = '#fbcfe8';
+      ctx.beginPath();
+      ctx.moveTo(-w * 0.38, -h / 2);
+      ctx.lineTo(-w * 0.32, -h / 2 - 10);
+      ctx.lineTo(-w * 0.25, -h / 2);
+      ctx.closePath();
+      ctx.fill();
+
+      // Right pointy cat ear (slate patch)
+      ctx.fillStyle = '#334155';
+      ctx.beginPath();
+      ctx.moveTo(w * 0.20, -h / 2);
+      ctx.lineTo(w * 0.32, -h / 2 - 14);
+      ctx.lineTo(w * 0.42, -h / 2);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = '#fbcfe8';
+      ctx.beginPath();
+      ctx.moveTo(w * 0.25, -h / 2);
+      ctx.lineTo(w * 0.32, -h / 2 - 10);
+      ctx.lineTo(w * 0.38, -h / 2);
+      ctx.closePath();
+      ctx.fill();
+
+      // Pink nose
+      ctx.fillStyle = '#f472b6';
+      ctx.beginPath();
+      ctx.moveTo(0, -2);
+      ctx.lineTo(-3, -6);
+      ctx.lineTo(3, -6);
+      ctx.closePath();
+      ctx.fill();
+
+      // Whiskers
+      ctx.strokeStyle = '#94a3b8';
+      ctx.lineWidth = 1.5;
+      [-1, 1].forEach((dir) => {
+        ctx.beginPath();
+        ctx.moveTo(dir * 10, -4);
+        ctx.lineTo(dir * 28, -8);
+        ctx.moveTo(dir * 10, -1);
+        ctx.lineTo(dir * 28, 1);
+        ctx.stroke();
+      });
+
+      // Cheerful eyes
+      ctx.strokeStyle = '#334155';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(-w * 0.2, -6, 5, Math.PI * 1.1, Math.PI * 1.9);
+      ctx.arc(w * 0.2, -6, 5, Math.PI * 1.1, Math.PI * 1.9);
+      ctx.stroke();
+
+    } else if (skin === 'pirate') {
+      // Treasure Chest
+      const woodGrad = ctx.createLinearGradient(0, -h / 2, 0, h / 2);
+      woodGrad.addColorStop(0, '#78350f');
+      woodGrad.addColorStop(0.5, '#592507');
+      woodGrad.addColorStop(1, '#3b1704');
+      ctx.fillStyle = woodGrad;
+      ctx.beginPath();
+      ctx.roundRect(-w / 2, -h / 2, w, h, [4, 4, 10, 10]);
+      ctx.fill();
+
+      // Wood plank lines
+      ctx.strokeStyle = '#291102';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(-w / 2, -2);
+      ctx.lineTo(w / 2, -2);
+      ctx.stroke();
+
+      // Brass Corner and Rim Brackets
+      ctx.fillStyle = '#eab308';
+      ctx.fillRect(-w / 2, -h / 2, 10, h);
+      ctx.fillRect(w / 2 - 10, -h / 2, 10, h);
+      ctx.fillRect(-w / 2, -h / 2, w, 6);
+
+      // Golden center lock latch
+      ctx.fillStyle = '#facc15';
+      ctx.beginPath();
+      ctx.roundRect(-8, -6, 16, 16, 3);
+      ctx.fill();
+      ctx.fillStyle = '#000';
+      ctx.beginPath();
+      ctx.arc(0, -1, 2.5, 0, Math.PI * 2);
+      ctx.rect(-1.5, -1, 3, 5);
+      ctx.fill();
+
+      // Rivet details
+      ctx.fillStyle = '#713f12';
+      [-w / 2 + 5, w / 2 - 5].forEach((rx) => {
+        [-h / 2 + 10, h / 2 - 8].forEach((ry) => {
+          ctx.beginPath();
+          ctx.arc(rx, ry, 1.8, 0, Math.PI * 2);
+          ctx.fill();
+        });
+      });
+
     } else if (skin === 'cyber') {
       // Cyber Neon Mecha
-      ctx.fillStyle = '#0f172a';
+      ctx.fillStyle = '#090d16';
       ctx.beginPath();
       ctx.roundRect(-w / 2, -h / 2, w, h, 6);
       ctx.fill();
+
+      // Cyan neon edge glow
       ctx.strokeStyle = '#38bdf8';
       ctx.lineWidth = 3;
       ctx.shadowColor = '#38bdf8';
       ctx.shadowBlur = 10;
       ctx.stroke();
+
+      // High-tech red/magenta center sensor strip
       ctx.fillStyle = '#f43f5e';
-      ctx.fillRect(-w * 0.3, -2, w * 0.6, 4);
+      ctx.shadowColor = '#f43f5e';
+      ctx.shadowBlur = 8;
+      ctx.fillRect(-w * 0.32, -3, w * 0.64, 6);
+
+      // Cyan circuit dots
+      ctx.fillStyle = '#38bdf8';
+      ctx.shadowBlur = 4;
+      [-w * 0.38, w * 0.38].forEach((cx) => {
+        ctx.fillRect(cx - 3, -h / 2 + 5, 6, 6);
+      });
+      ctx.shadowBlur = 0;
+
+    } else if (skin === 'rainbow') {
+      // Rainbow Cloud
+      ctx.fillStyle = '#f8fafc';
+      ctx.shadowColor = 'rgba(255, 255, 255, 0.4)';
+      ctx.shadowBlur = 8;
+      ctx.beginPath();
+      ctx.arc(-w * 0.32, 4, 16, 0, Math.PI * 2);
+      ctx.arc(-w * 0.11, -2, 19, 0, Math.PI * 2);
+      ctx.arc(w * 0.11, -2, 19, 0, Math.PI * 2);
+      ctx.arc(w * 0.32, 4, 16, 0, Math.PI * 2);
+      ctx.roundRect(-w / 2, 0, w, h / 2, [0, 0, 14, 14]);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      // Rainbow arc rim stripes across the top
+      const rainbowColors = ['#ef4444', '#f97316', '#facc15', '#22c55e', '#3b82f6', '#a855f7'];
+      const stripeHeight = 2.5;
+      rainbowColors.forEach((color, idx) => {
+        ctx.fillStyle = color;
+        ctx.fillRect(-w * 0.44 + idx * 2, -h / 2 + idx * stripeHeight, w * 0.88 - idx * 4, stripeHeight);
+      });
+
+      // Cute blush cheeks
+      ctx.fillStyle = 'rgba(251, 113, 133, 0.6)';
+      ctx.beginPath();
+      ctx.arc(-w * 0.22, 6, 4, 0, Math.PI * 2);
+      ctx.arc(w * 0.22, 6, 4, 0, Math.PI * 2);
+      ctx.fill();
+
     } else if (skin === 'watermelon') {
-      // Watermelon rind & pink interior
+      // Watermelon rind & juicy interior
       ctx.fillStyle = '#15803d';
       ctx.beginPath();
       ctx.arc(0, -h / 2, w / 2, 0, Math.PI);
       ctx.fill();
-      ctx.fillStyle = '#f43f5e';
+      ctx.strokeStyle = '#052e16';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      // White rind band
+      ctx.fillStyle = '#f0fdf4';
       ctx.beginPath();
-      ctx.arc(0, -h / 2, w * 0.44, 0, Math.PI);
+      ctx.arc(0, -h / 2, w * 0.45, 0, Math.PI);
       ctx.fill();
+
+      // Red sweet melon meat
+      ctx.fillStyle = '#ef4444';
+      ctx.beginPath();
+      ctx.arc(0, -h / 2, w * 0.40, 0, Math.PI);
+      ctx.fill();
+
+      // Black seeds
+      ctx.fillStyle = '#0f172a';
+      [[-16, 2], [0, 6], [16, 2], [-8, 11], [8, 11]].forEach(([sx, sy]) => {
+        ctx.beginPath();
+        ctx.ellipse(sx, sy, 1.8, 3, 0.2, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+    } else if (skin === 'ufo') {
+      // Alien Saucer
+      // Tractor beam glow underneath
+      ctx.fillStyle = 'rgba(74, 222, 128, 0.2)';
+      ctx.beginPath();
+      ctx.moveTo(-w * 0.25, h / 2);
+      ctx.lineTo(-w * 0.45, h / 2 + 14);
+      ctx.lineTo(w * 0.45, h / 2 + 14);
+      ctx.lineTo(w * 0.25, h / 2);
+      ctx.closePath();
+      ctx.fill();
+
+      // Metallic saucer hull
+      const ufoGrad = ctx.createLinearGradient(-w / 2, 0, w / 2, 0);
+      ufoGrad.addColorStop(0, '#94a3b8');
+      ufoGrad.addColorStop(0.5, '#e2e8f0');
+      ufoGrad.addColorStop(1, '#64748b');
+      ctx.fillStyle = ufoGrad;
+      ctx.beginPath();
+      ctx.ellipse(0, 2, w / 2, h * 0.45, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#334155';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Translucent green glass cockpit dome
+      ctx.fillStyle = 'rgba(52, 211, 153, 0.75)';
+      ctx.shadowColor = '#34d399';
+      ctx.shadowBlur = 10;
+      ctx.beginPath();
+      ctx.arc(0, -2, w * 0.24, Math.PI, 0);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      // Little green alien head inside dome
+      ctx.fillStyle = '#22c55e';
+      ctx.beginPath();
+      ctx.ellipse(0, -6, 6, 7, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#000';
+      ctx.beginPath();
+      ctx.ellipse(-2.5, -7, 2, 3, -0.3, 0, Math.PI * 2);
+      ctx.ellipse(2.5, -7, 2, 3, 0.3, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Blinking saucer rim lights
+      const lightColors = ['#ef4444', '#facc15', '#06b6d4', '#a855f7'];
+      [-w * 0.35, -w * 0.12, w * 0.12, w * 0.35].forEach((lx, i) => {
+        ctx.fillStyle = lightColors[i % lightColors.length];
+        ctx.beginPath();
+        ctx.arc(lx, 3, 3, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+    } else if (skin === 'galaxy') {
+      // Cosmic Nebula
+      const cosmicGrad = ctx.createLinearGradient(-w / 2, -h / 2, w / 2, h / 2);
+      cosmicGrad.addColorStop(0, '#0f172a');
+      cosmicGrad.addColorStop(0.35, '#581c87');
+      cosmicGrad.addColorStop(0.7, '#be185d');
+      cosmicGrad.addColorStop(1, '#1e1b4b');
+      ctx.fillStyle = cosmicGrad;
+      ctx.shadowColor = '#c084fc';
+      ctx.shadowBlur = 12;
+      ctx.beginPath();
+      ctx.roundRect(-w / 2, -h / 2, w, h, [8, 8, 16, 16]);
+      ctx.fill();
+
+      // Glowing cosmic rim
+      ctx.strokeStyle = '#e879f9';
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      // Saturn-like nebula ring angled across basket
+      ctx.strokeStyle = 'rgba(244, 114, 182, 0.7)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, w * 0.42, 8, -0.2, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Twinkling stars
+      [[-w * 0.28, -5], [w * 0.24, -8], [-w * 0.1, 7], [w * 0.15, 6], [-w * 0.35, 8]].forEach(([sx, sy]) => {
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(sx, sy, 2, 2);
+        ctx.fillStyle = '#fde047';
+        ctx.fillRect(sx + 0.5, sy - 1.5, 1, 4);
+        ctx.fillRect(sx - 1.5, sy + 0.5, 4, 1);
+      });
+
     } else if (skin === 'panda') {
       // Cute Panda basket
       ctx.fillStyle = '#ffffff';
       ctx.beginPath();
       ctx.roundRect(-w / 2, -h / 2, w, h, 14);
       ctx.fill();
+      ctx.strokeStyle = '#e2e8f0';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Black Ears
       ctx.fillStyle = '#000000';
-      // Ears
       ctx.beginPath();
       ctx.arc(-w * 0.35, -h * 0.5, 9, 0, Math.PI * 2);
       ctx.arc(w * 0.35, -h * 0.5, 9, 0, Math.PI * 2);
       ctx.fill();
-      // Eyes & Nose
+
+      // Eye patches
       ctx.beginPath();
-      ctx.ellipse(-w * 0.2, -2, 5, 7, -0.3, 0, Math.PI * 2);
-      ctx.ellipse(w * 0.2, -2, 5, 7, 0.3, 0, Math.PI * 2);
+      ctx.ellipse(-w * 0.2, -2, 6, 8, -0.25, 0, Math.PI * 2);
+      ctx.ellipse(w * 0.2, -2, 6, 8, 0.25, 0, Math.PI * 2);
       ctx.fill();
+
+      // White eye sparkles
+      ctx.fillStyle = '#fff';
+      ctx.beginPath();
+      ctx.arc(-w * 0.2 - 1, -4, 2, 0, Math.PI * 2);
+      ctx.arc(w * 0.2 - 1, -4, 2, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Black nose
+      ctx.fillStyle = '#000';
+      ctx.beginPath();
+      ctx.ellipse(0, 3, 4, 3, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+    } else if (skin === 'lava') {
+      // Magma Cauldron
+      ctx.fillStyle = '#1c1917';
+      ctx.beginPath();
+      ctx.roundRect(-w / 2, -h / 2, w, h, [4, 4, 16, 16]);
+      ctx.fill();
+
+      // Glowing lava rim & surface
+      const lavaGrad = ctx.createLinearGradient(-w / 2, 0, w / 2, 0);
+      lavaGrad.addColorStop(0, '#ea580c');
+      lavaGrad.addColorStop(0.5, '#facc15');
+      lavaGrad.addColorStop(1, '#ef4444');
+      ctx.fillStyle = lavaGrad;
+      ctx.shadowColor = '#f97316';
+      ctx.shadowBlur = 12;
+      ctx.beginPath();
+      ctx.roundRect(-w * 0.44, -h / 2 + 2, w * 0.88, 10, 4);
+      ctx.fill();
+
+      // Lava crack veins
+      ctx.strokeStyle = '#f97316';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(-w * 0.3, 0);
+      ctx.lineTo(-w * 0.15, 8);
+      ctx.lineTo(0, 4);
+      ctx.lineTo(w * 0.2, 12);
+      ctx.stroke();
+
+      // Bubbles
+      ctx.fillStyle = '#fef08a';
+      ctx.beginPath();
+      ctx.arc(-w * 0.2, -2, 3.5, 0, Math.PI * 2);
+      ctx.arc(w * 0.18, -1, 4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+    } else if (skin === 'dragon') {
+      // Dragon Hoard
+      const dragonGrad = ctx.createLinearGradient(0, -h / 2, 0, h / 2);
+      dragonGrad.addColorStop(0, '#991b1b');
+      dragonGrad.addColorStop(0.7, '#450a0a');
+      dragonGrad.addColorStop(1, '#180202');
+      ctx.fillStyle = dragonGrad;
+      ctx.shadowColor = '#dc2626';
+      ctx.shadowBlur = 10;
+      ctx.beginPath();
+      ctx.roundRect(-w / 2, -h / 2, w, h, [8, 8, 16, 16]);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      // Golden dragon scales trim
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+
+      // Sweeping Golden Horns on both sides
+      ctx.fillStyle = '#f59e0b';
+      // Left horn
+      ctx.beginPath();
+      ctx.moveTo(-w * 0.42, -h / 2);
+      ctx.quadraticCurveTo(-w * 0.58, -h * 0.85, -w * 0.46, -h * 0.95);
+      ctx.quadraticCurveTo(-w * 0.48, -h * 0.6, -w * 0.32, -h / 2);
+      ctx.closePath();
+      ctx.fill();
+
+      // Right horn
+      ctx.beginPath();
+      ctx.moveTo(w * 0.42, -h / 2);
+      ctx.quadraticCurveTo(w * 0.58, -h * 0.85, w * 0.46, -h * 0.95);
+      ctx.quadraticCurveTo(w * 0.48, -h * 0.6, w * 0.32, -h / 2);
+      ctx.closePath();
+      ctx.fill();
+
+      // Fiery Dragon Eye in center
+      ctx.fillStyle = '#facc15';
+      ctx.shadowColor = '#facc15';
+      ctx.shadowBlur = 8;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 9, 6, 0, 0, Math.PI * 2);
+      ctx.fill();
+      // Slit pupil
+      ctx.fillStyle = '#000000';
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 2, 5.5, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
     } else {
       // Classic Woven Wicker Basket
       const grad = ctx.createLinearGradient(0, -h / 2, 0, h / 2);
@@ -1017,6 +1479,7 @@
       card.innerHTML = `
         <span class="skin-preview-icon">${skin.icon}</span>
         <span class="skin-name">${skin.name}</span>
+        ${skin.desc ? `<span class="skin-desc">${skin.desc}</span>` : ''}
         ${
           isOwned
             ? `<span class="skin-status-badge">${isActive ? 'Equipped' : 'Select'}</span>`

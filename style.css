@@ -622,6 +622,12 @@ body {
   gap: 12px;
 }
 
+@media (min-width: 480px) {
+  .skins-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
 .skin-card {
   background: rgba(30, 41, 59, 0.6);
   border: 2px solid var(--card-border);
@@ -630,7 +636,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s;
@@ -653,6 +659,14 @@ body {
 .skin-name {
   font-size: 0.85rem;
   font-weight: 800;
+}
+
+.skin-desc {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  line-height: 1.25;
+  margin-top: -2px;
+  margin-bottom: 2px;
 }
 
 .skin-status-badge {
