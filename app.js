@@ -617,8 +617,7 @@
         return;
       }
 
-      // Bomb explosion hit
-      score = Math.max(0, score - 50);
+      // Bomb explosion hit (Time penalty only - no point loss)
       timeLeft = Math.max(0, timeLeft - 3);
       combo = 0;
       updateComboBadge();
@@ -627,7 +626,7 @@
       screenShake = 18;
       playSound('bomb');
       createJuiceParticles(item.x, item.y, '#334155', 25);
-      addFloatingText(item.x, item.y, 'BOMB! -50 pts -3s 💣', '#ef4444');
+      addFloatingText(item.x, item.y, 'BOMB! -3s 💣', '#ef4444');
 
       if (timeLeft <= 0) {
         triggerTimeUp();
