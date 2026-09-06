@@ -33,8 +33,16 @@ A juicy, fast-paced arcade fruit-catching game built with pure HTML5 Canvas, mod
     - 🐼 **Panda Pouch**
     - 🔥 **Phoenix Flame (Mythical Firebird with Blazing Embers)**
     - 🟢 **Green (The Legendary 10,000 Coins Apex Skin)**
-- 🔊 **Procedural Web Audio Engine**:
-  - Pitch-shifting catch pops, golden twinkling arpeggios, bomb explosions, and victory fanfares synthesized dynamically in-browser via the Web Audio API (zero audio files downloaded).
+- 🎵 **Dynamic Procedural Background Music**:
+  - Full chiptune retro soundtrack synthesized in real-time via the Web Audio API (zero MP3/WAV audio files downloaded).
+  - Dynamically shifts tempo, bass, melody, and drum patterns between:
+    - **Normal Mode**: Joyful, bouncy chiptune arcade melody (~128 BPM, C Major).
+    - **Hard Mode**: Fast-paced, driving action theme (~146 BPM, A Minor).
+    - **Fever Time**: Rapid golden fanfare dance beat (~162 BPM).
+    - **Menu & Pause**: Ambient title groove and soft pause dimming.
+  - Dedicated HUD **Music Toggle** button (`🎵` / `🔇`) and keyboard shortcut (`B`).
+- 🔊 **Procedural Sound Effects**:
+  - Pitch-shifting catch pops, golden twinkling arpeggios, bomb explosions, and victory fanfares synthesized dynamically via Web Audio API.
 - 📱 **Interactive Drag Scroll Bar (Mobile & PC)**:
   - Drag the ergonomic bottom scroll bar across the rail to steer the basket with zero latency. Includes edge nudge arrows (`◀` / `▶`) and skin-matching thumb icons. PWA-ready for offline play.
 
@@ -45,7 +53,7 @@ A juicy, fast-paced arcade fruit-catching game built with pure HTML5 Canvas, mod
 | Platform | Controls |
 | :--- | :--- |
 | **All Platforms (Mobile & PC)** | **Drag the bottom scroll bar** to steer the basket smoothly across the screen • Tap `◀` / `▶` to nudge |
-| **Keyboard** | `Left` / `Right` Arrow keys or `A` / `D` to steer • `P` or `Esc` to Pause • `M` to Mute |
+| **Keyboard** | `Left` / `Right` Arrow keys or `A` / `D` to steer • `P` or `Esc` to Pause • `M` to Toggle Sound • `B` to Toggle Music |
 | **Mouse / Touch** | Hover or drag horizontally directly on the play area or use the bottom scroll bar |
 
 ---

@@ -13,7 +13,7 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/svg+xml" href="icon.svg">
   <link rel="apple-touch-icon" href="icon.svg">
-  <link rel="stylesheet" href="style.css?v=18">
+  <link rel="stylesheet" href="style.css?v=19">
 </head>
 <body>
   <div class="game-wrapper">
@@ -51,6 +51,10 @@
           <span class="timer-icon">⏱️</span>
           <span id="timerVal" class="hud-val">2:30</span>
         </div>
+        <!-- Music Toggle -->
+        <button id="btnToggleMusic" class="btn-hud-icon" title="Toggle Music (B)" aria-label="Toggle Music">
+          🎵
+        </button>
         <!-- Sound Mute -->
         <button id="btnToggleSound" class="btn-hud-icon" title="Toggle Sound (M)" aria-label="Toggle Sound">
           🔊
@@ -260,11 +264,18 @@
               <p>Catch Magnets (pulls nearby fruit), Clocks (+5s bonus time & slow-mo), and Shields (blocks 1 bomb).</p>
             </div>
           </div>
+          <div class="rule-item">
+            <span class="rule-icon">🎵</span>
+            <div>
+              <strong>Dynamic Music & Sound Effects</strong>
+              <p>Procedural chiptune background music shifts dynamically with Normal mode, Hard mode, and Fever Time! Toggle music with 🎵 (or <strong>B</strong> key) and sound effects with 🔊 (or <strong>M</strong> key).</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <script src="app.js?v=18"></script>
+  <script src="app.js?v=19"></script>
 </body>
 </html>

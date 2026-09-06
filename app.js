@@ -18,6 +18,7 @@
     if (audioCtx && audioCtx.state === 'suspended') {
       audioCtx.resume();
     }
+    initBgmNodes();
   }
 
   function playSound(type, param = 1) {
@@ -124,6 +125,318 @@
         });
       }
     } catch (e) {}
+  }
+
+  // --- Background Music Synthesizer Engine ---
+  let bgmGainNode = null;
+  let bgmFilterNode = null;
+  let isMusicMuted = false;
+  let musicTimer = null;
+  let nextStepTime = 0;
+  let currentMusicStep = 0;
+  let noiseBuffer = null;
+
+  // 64-step loops (4 bars of 16th notes)
+  const BASS_NORMAL = [
+    48,0,0,60,0,0,48,0,55,0,0,60,0,0,55,0,
+    43,0,0,55,0,0,43,0,50,0,0,55,0,0,50,0,
+    45,0,0,57,0,0,45,0,52,0,0,57,0,0,52,0,
+    41,0,0,53,0,0,41,0,48,0,0,53,0,0,48,0
+  ];
+
+  const MELODY_NORMAL = [
+    76,0,79,0,81,0,79,0,76,0,74,0,72,0,74,0,
+    76,0,74,0,71,0,67,0,71,0,74,0,79,0,77,0,
+    76,0,72,0,76,0,81,0,84,0,83,0,81,0,79,0,
+    81,0,77,0,79,0,81,0,83,0,84,0,86,0,83,0
+  ];
+
+  const ARP_NORMAL = [
+    60,0,64,0,67,0,72,0,67,0,64,0,67,0,64,0,
+    59,0,62,0,67,0,71,0,67,0,62,0,67,0,62,0,
+    57,0,60,0,64,0,69,0,64,0,60,0,64,0,60,0,
+    53,0,57,0,60,0,65,0,60,0,57,0,60,0,57,0
+  ];
+
+  const BASS_HARD = [
+    45,0,45,57,0,45,57,0,45,0,45,57,0,45,57,0,
+    41,0,41,53,0,41,53,0,41,0,41,53,0,41,53,0,
+    38,0,38,50,0,38,50,0,38,0,38,50,0,38,50,0,
+    40,0,40,52,0,40,52,0,40,0,40,52,0,40,52,0
+  ];
+
+  const MELODY_HARD = [
+    81,0,84,0,83,0,81,0,76,0,79,0,81,0,83,0,
+    84,0,81,0,77,0,81,0,84,0,86,0,84,0,83,0,
+    81,0,77,0,74,0,77,0,81,0,83,0,84,0,86,0,
+    88,0,86,0,83,0,80,0,83,0,86,0,83,0,80,0
+  ];
+
+  function getNoiseBuffer() {
+    if (!noiseBuffer && audioCtx) {
+      try {
+        const bufferSize = Math.floor(audioCtx.sampleRate * 0.15);
+        noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const data = noiseBuffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          data[i] = Math.random() * 2 - 1;
+        }
+      } catch (e) {}
+    }
+    return noiseBuffer;
+  }
+
+  function initBgmNodes() {
+    if (!audioCtx) return;
+    if (!bgmGainNode) {
+      try {
+        bgmFilterNode = audioCtx.createBiquadFilter();
+        bgmFilterNode.type = 'lowpass';
+        bgmFilterNode.frequency.setValueAtTime(2800, audioCtx.currentTime);
+
+        bgmGainNode = audioCtx.createGain();
+        const initialVol = (isMuted || isMusicMuted) ? 0 : 0.16;
+        bgmGainNode.gain.setValueAtTime(initialVol, audioCtx.currentTime);
+
+        bgmFilterNode.connect(bgmGainNode);
+        bgmGainNode.connect(audioCtx.destination);
+      } catch (e) {}
+    }
+  }
+
+  function updateBgmVolume() {
+    if (!bgmGainNode || !audioCtx) return;
+    const now = audioCtx.currentTime;
+    try {
+      if (isMuted || isMusicMuted) {
+        bgmGainNode.gain.setTargetAtTime(0, now, 0.05);
+      } else if (gameState === 'PAUSED') {
+        bgmGainNode.gain.setTargetAtTime(0.04, now, 0.08);
+      } else if (gameState === 'PLAYING') {
+        bgmGainNode.gain.setTargetAtTime(feverActive ? 0.20 : 0.16, now, 0.08);
+      } else {
+        // Menu / Title / Game Over
+        bgmGainNode.gain.setTargetAtTime(0.10, now, 0.1);
+      }
+    } catch (e) {}
+  }
+
+  function midiToFreq(m) {
+    return 440 * Math.pow(2, (m - 69) / 12);
+  }
+
+  function playBgmTone(midi, time, duration, type = 'triangle', vol = 0.22) {
+    if (!audioCtx || isMuted || isMusicMuted || !midi) return;
+    try {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(midiToFreq(midi), time);
+
+      gain.gain.setValueAtTime(0.001, time);
+      gain.gain.linearRampToValueAtTime(vol, time + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.001, time + duration);
+
+      osc.connect(gain);
+      gain.connect(bgmFilterNode || audioCtx.destination);
+      osc.start(time);
+      osc.stop(time + duration);
+    } catch (e) {}
+  }
+
+  function playBgmKick(time) {
+    if (!audioCtx || isMuted || isMusicMuted) return;
+    try {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(130, time);
+      osc.frequency.exponentialRampToValueAtTime(36, time + 0.08);
+
+      gain.gain.setValueAtTime(0.28, time);
+      gain.gain.exponentialRampToValueAtTime(0.001, time + 0.08);
+
+      osc.connect(gain);
+      gain.connect(bgmGainNode || audioCtx.destination);
+      osc.start(time);
+      osc.stop(time + 0.08);
+    } catch (e) {}
+  }
+
+  function playBgmSnare(time) {
+    if (!audioCtx || isMuted || isMusicMuted) return;
+    try {
+      const noise = getNoiseBuffer();
+      if (noise) {
+        const src = audioCtx.createBufferSource();
+        const filter = audioCtx.createBiquadFilter();
+        const gain = audioCtx.createGain();
+
+        src.buffer = noise;
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(1200, time);
+        filter.Q.setValueAtTime(1.5, time);
+
+        gain.gain.setValueAtTime(0.14, time);
+        gain.gain.exponentialRampToValueAtTime(0.001, time + 0.07);
+
+        src.connect(filter);
+        filter.connect(gain);
+        gain.connect(bgmGainNode || audioCtx.destination);
+        src.start(time);
+        src.stop(time + 0.07);
+      }
+      const osc = audioCtx.createOscillator();
+      const oscGain = audioCtx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(180, time);
+      osc.frequency.exponentialRampToValueAtTime(70, time + 0.06);
+      oscGain.gain.setValueAtTime(0.10, time);
+      oscGain.gain.exponentialRampToValueAtTime(0.001, time + 0.06);
+      osc.connect(oscGain);
+      oscGain.connect(bgmGainNode || audioCtx.destination);
+      osc.start(time);
+      osc.stop(time + 0.06);
+    } catch (e) {}
+  }
+
+  function playBgmHiHat(time) {
+    if (!audioCtx || isMuted || isMusicMuted) return;
+    try {
+      const noise = getNoiseBuffer();
+      if (noise) {
+        const src = audioCtx.createBufferSource();
+        const filter = audioCtx.createBiquadFilter();
+        const gain = audioCtx.createGain();
+
+        src.buffer = noise;
+        filter.type = 'highpass';
+        filter.frequency.setValueAtTime(7200, time);
+
+        gain.gain.setValueAtTime(0.05, time);
+        gain.gain.exponentialRampToValueAtTime(0.001, time + 0.025);
+
+        src.connect(filter);
+        filter.connect(gain);
+        gain.connect(bgmGainNode || audioCtx.destination);
+        src.start(time);
+        src.stop(time + 0.025);
+      }
+    } catch (e) {}
+  }
+
+  function playStep(step, time, stepDuration) {
+    if (!audioCtx || isMuted || isMusicMuted) return;
+
+    const isHard = gameMode === 'HARD';
+    const isFever = feverActive;
+
+    // 1. Drums
+    const beatInBar = step % 16;
+    if (isFever) {
+      if (beatInBar === 0 || beatInBar === 4 || beatInBar === 8 || beatInBar === 12) {
+        playBgmKick(time);
+      }
+      if (beatInBar === 4 || beatInBar === 12) {
+        playBgmSnare(time);
+      }
+      if (beatInBar % 2 === 0) {
+        playBgmHiHat(time);
+      }
+    } else if (isHard) {
+      if (beatInBar === 0 || beatInBar === 6 || beatInBar === 8 || beatInBar === 14) {
+        playBgmKick(time);
+      }
+      if (beatInBar === 4 || beatInBar === 12) {
+        playBgmSnare(time);
+      }
+      if (beatInBar % 2 === 0) {
+        playBgmHiHat(time);
+      }
+    } else {
+      if (beatInBar === 0 || beatInBar === 8) {
+        playBgmKick(time);
+      }
+      if (beatInBar === 4 || beatInBar === 12) {
+        playBgmSnare(time);
+      }
+      if (beatInBar === 2 || beatInBar === 6 || beatInBar === 10 || beatInBar === 14) {
+        playBgmHiHat(time);
+      }
+    }
+
+    // 2. Bass
+    const bassNote = isHard ? BASS_HARD[step] : BASS_NORMAL[step];
+    if (bassNote > 0) {
+      playBgmTone(bassNote, time, stepDuration * 2.2, 'triangle', 0.28);
+    }
+
+    // 3. Melody
+    if (isFever) {
+      const feverArp = [72, 76, 79, 84, 88, 84, 79, 76];
+      const note = feverArp[step % feverArp.length];
+      playBgmTone(note, time, stepDuration * 1.5, 'triangle', 0.18);
+    } else {
+      const melodyNote = isHard ? MELODY_HARD[step] : MELODY_NORMAL[step];
+      if (melodyNote > 0) {
+        playBgmTone(melodyNote, time, stepDuration * 1.9, 'triangle', 0.22);
+      }
+      if (!isHard) {
+        const arpNote = ARP_NORMAL[step];
+        if (arpNote > 0) {
+          playBgmTone(arpNote, time, stepDuration * 1.2, 'sine', 0.08);
+        }
+      }
+    }
+  }
+
+  function scheduleMusic() {
+    if (!audioCtx || isMuted || isMusicMuted) return;
+    if (audioCtx.state === 'suspended') return;
+
+    let bpm = 128;
+    if (feverActive) {
+      bpm = 162;
+    } else if (gameMode === 'HARD') {
+      bpm = 146;
+    } else if (gameState !== 'PLAYING') {
+      bpm = 112;
+    }
+
+    const stepDuration = 60.0 / bpm / 4;
+
+    if (nextStepTime < audioCtx.currentTime) {
+      nextStepTime = audioCtx.currentTime + 0.05;
+    }
+
+    while (nextStepTime < audioCtx.currentTime + 0.12) {
+      playStep(currentMusicStep, nextStepTime, stepDuration);
+      nextStepTime += stepDuration;
+      currentMusicStep = (currentMusicStep + 1) % 64;
+    }
+  }
+
+  function startMusicEngine() {
+    initAudio();
+    initBgmNodes();
+    if (!musicTimer) {
+      nextStepTime = audioCtx ? audioCtx.currentTime + 0.05 : 0;
+      musicTimer = setInterval(scheduleMusic, 25);
+    }
+  }
+
+  function toggleMusic() {
+    isMusicMuted = !isMusicMuted;
+    try {
+      localStorage.setItem('fruit_catcher_music_muted', isMusicMuted ? '1' : '0');
+    } catch (e) {}
+    if (btnToggleMusic) {
+      btnToggleMusic.textContent = isMusicMuted ? '🔇' : '🎵';
+      btnToggleMusic.title = isMusicMuted ? 'Unmute Music' : 'Mute Music';
+    }
+    initAudio();
+    startMusicEngine();
+    updateBgmVolume();
   }
 
   // --- Game Config & Constants ---
@@ -251,6 +564,7 @@
   const timerPill = document.getElementById('timerPill');
   const timerVal = document.getElementById('timerVal');
   const hardModeBadge = document.getElementById('hardModeBadge');
+  const btnToggleMusic = document.getElementById('btnToggleMusic');
   const btnToggleSound = document.getElementById('btnToggleSound');
   const btnPause = document.getElementById('btnPause');
 
@@ -330,7 +644,15 @@
       if (activeSkin && unlockedSkins.includes(activeSkin)) {
         basket.skin = activeSkin;
       }
+
+      const savedMusicMuted = localStorage.getItem('fruit_catcher_music_muted');
+      if (savedMusicMuted !== null) isMusicMuted = savedMusicMuted === '1';
     } catch (e) {}
+
+    if (btnToggleMusic) {
+      btnToggleMusic.textContent = isMusicMuted ? '🔇' : '🎵';
+      btnToggleMusic.title = isMusicMuted ? 'Unmute Music' : 'Mute Music';
+    }
 
     coinsVal.textContent = coins;
     updateScrollThumbSkinIcon();
@@ -353,6 +675,7 @@
     gameMode = mode;
     savePersistedData();
     updateModeUI();
+    updateBgmVolume();
     playSound('powerup');
   }
 
@@ -515,12 +838,15 @@
       else hardModeBadge.classList.add('hidden');
     }
     playSound('powerup');
+    startMusicEngine();
+    updateBgmVolume();
   }
 
   function pauseGame() {
     if (gameState !== 'PLAYING') return;
     gameState = 'PAUSED';
     pauseOverlay.classList.remove('hidden');
+    updateBgmVolume();
   }
 
   function resumeGame() {
@@ -528,10 +854,13 @@
     initAudio();
     gameState = 'PLAYING';
     pauseOverlay.classList.add('hidden');
+    startMusicEngine();
+    updateBgmVolume();
   }
 
   function triggerTimeUp() {
     gameState = 'GAMEOVER';
+    updateBgmVolume();
     playSound('timeup');
 
     let isNewRecord = false;
@@ -661,6 +990,7 @@
         feverMeterFill.style.background = 'linear-gradient(90deg, #94a3b8, #64748b)';
         if (feverMeterWrapper) feverMeterWrapper.classList.add('cooldown');
         addFloatingText(basket.x, basket.y - 40, 'Fever Ended • 5s Cooldown', '#94a3b8', 1.2);
+        updateBgmVolume();
       }
     } else if (feverCooldownTimer > 0) {
       feverCooldownTimer -= dt;
@@ -887,6 +1217,7 @@
     feverTimer = 8;
     feverCooldownTimer = 0;
     if (feverMeterWrapper) feverMeterWrapper.classList.remove('cooldown');
+    updateBgmVolume();
     const isHard = gameMode === 'HARD';
     feverLabel.textContent = isHard ? '⚠️ HARD FEVER (DANGER!) ⚠️' : '🌟 FEVER TIME 🌟';
     feverMeterFill.style.background = isHard
@@ -3077,6 +3408,7 @@
         else if (gameState === 'PAUSED') resumeGame();
       }
       if (e.code === 'KeyM') toggleSound();
+      if (e.code === 'KeyB') toggleMusic();
     });
 
     window.addEventListener('keyup', (e) => {
@@ -3193,9 +3525,20 @@
       gameState = 'START';
       pauseOverlay.classList.add('hidden');
       startOverlay.classList.remove('hidden');
+      updateBgmVolume();
     });
 
+    if (btnToggleMusic) btnToggleMusic.addEventListener('click', toggleMusic);
     btnToggleSound.addEventListener('click', toggleSound);
+
+    // Unlock Web Audio and start ambient background music on first user gesture
+    const unlockAudio = () => {
+      initAudio();
+      startMusicEngine();
+      updateBgmVolume();
+    };
+    window.addEventListener('pointerdown', unlockAudio, { once: true });
+    window.addEventListener('keydown', unlockAudio, { once: true });
 
     // Shop modal
     btnOpenShop.addEventListener('click', () => { renderShop(); shopModal.classList.remove('hidden'); });
@@ -3210,6 +3553,7 @@
   function toggleSound() {
     isMuted = !isMuted;
     btnToggleSound.textContent = isMuted ? '🔇' : '🔊';
+    updateBgmVolume();
   }
 
   function registerServiceWorker() {
